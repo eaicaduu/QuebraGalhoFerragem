@@ -1,0 +1,19 @@
+.banner-carousel{
+    width:100%;
+    max-height:500px;
+    object-fit:cover;
+}
+
+/* tablet */
+@media (max-width:992px){
+    .banner-carousel{
+        max-height:350px;
+    }
+}
+
+/* celular */
+@media (max-width:576px){
+    .banner-carousel{
+        max-height:220px;
+    }
+}
