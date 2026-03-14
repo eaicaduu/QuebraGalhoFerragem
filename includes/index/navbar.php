@@ -52,7 +52,7 @@
 
                 <?php if (isset($user['tipo_usuario']) && in_array($user['tipo_usuario'], [2, 3])): ?>
                     <li class="nav-item fw-bold">
-                        <a href="admin.php" style="cursor:pointer;" class="nav-link d-flex align-items-center">
+                        <a href="admin.php" style="cursor:pointer;" class="nav-link d-flex align-items-center  <?= ($paginaAtual == 'admin.php' || 'produtos.php' || 'pedidos.php' || 'usuarios.php'  || 'configuracoes.php') ? 'active' : '' ?>">
                             <i class="fa-solid fa-tools me-1"></i> Painel
                         </a>
                     </li>

@@ -1,11 +1,15 @@
 <?php
 session_start();
-$paginaAtual = basename($_SERVER['PHP_SELF']);
 
+$paginaAtual = $_GET['page'] ?? 'dashboard';
+$acao = $_GET['acao'] ?? '';
+
+require_once __DIR__ . '/app/config/database.php';
+require_once __DIR__ . '/app/config/migrations.php';
 require_once __DIR__ . '/app/config/auth.php';
 
 if (!$user || !$isAdmin) {
-    header("Location: index.php");
+    header('Location: index.php');
     exit;
 }
 
@@ -29,7 +33,7 @@ if (!$user || !$isAdmin) {
     <main class="flex-fill">
         <div class="container my-2">
             <!-- SlideBar -->
-            <?php include 'includes/admin/slidebar.php'; ?>
+            <?php include 'includes/admin/layout/sidebar.php'; ?>
         </div>
     </main>
 
