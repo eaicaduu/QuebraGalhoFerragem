@@ -1,4 +1,4 @@
-function abrirCadastroSwal() {
+window.abrirCadastroSwal = function () {
     Swal.fire({
         html: `
             <div style="display:flex; justify-content:space-between; align-items:center; width:100%; margin-bottom:15px;">
@@ -29,7 +29,7 @@ function abrirCadastroSwal() {
                 <button type="button" id="btnCadastrar" class="btn btn-warning fw-bold w-100 rounded-4" style="border:none; padding:10px;">Cadastrar</button>
 
                 <p style="margin-top:10px; font-size:1rem;">Já possui uma conta? <a onclick="abrirLoginSwal()" style="cursor:pointer;" class="text-primary">Acesse</a></p>
-                <p style="font-size:0.6rem; color:gray;">Ao se cadastrar, você concorda com o <a href="termos.php" style="color:gray;">termo de uso</a></p>
+                <p style="font-size:0.6rem; color:gray;">Ao se cadastrar, você concorda com o <a style="color:gray;">termo de uso</a></p>
             </form>
         `,
         background: '#ffffff',
@@ -53,10 +53,28 @@ function abrirCadastroSwal() {
             });
 
             const btnCadastrar = Swal.getPopup().querySelector('#btnCadastrar');
+            const inputs = Swal.getPopup().querySelectorAll('#nome, #emailCadastro, #senhaCadastro');
+
+            inputs.forEach((input, index) => {
+
+                input.addEventListener('keydown', function (e) {
+
+                    if (e.key === 'Enter') {
+
+                        e.preventDefault();
+
+                        if (index < inputs.length - 1) {
+                            inputs[index + 1].focus();
+                        } else {
+                            btnCadastrar.click();
+                        }
+
+                    }
+
+                });
+
+            });
             btnCadastrar.addEventListener('click', () => {
-                const nome = Swal.getPopup().querySelector('#nome').value;
-                const email = Swal.getPopup().querySelector('#emailCadastro').value.trim();
-                const senha = Swal.getPopup().querySelector('#senhaCadastro').value;
 
                 if (!nome || !email || !senha) {
                     Swal.showValidationMessage('Por favor, preencha todos os campos.');
@@ -78,7 +96,8 @@ function abrirCadastroSwal() {
                 fetch('./app/models/perfil/cadastro.php', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ nome, email, senha })
+                    body: JSON.stringify({ nome, email, senha }),
+                    credentials: 'same-origin'
                 })
                     .then(response => response.json())
                     .then(data => {
@@ -95,12 +114,12 @@ function abrirCadastroSwal() {
                                     body: new URLSearchParams({ email, senha })
                                 }).then(response => response.json())
                                     .then(loginData => {
-                                         if (loginData.success) {
+                                        if (loginData.success) {
                                             window.location.reload();
-                                         }
+                                        }
                                     });
-                                    });
-                            } else {
+                            });
+                        } else {
                             Swal.fire({
                                 icon: 'error',
                                 title: 'Erro no cadastro',

@@ -1,41 +1,56 @@
+<?php
+session_start();
+$paginaAtual = basename($_SERVER['PHP_SELF']);
+
+require_once __DIR__ . '/app/config/database.php';
+require_once __DIR__ . '/app/config/migrations.php';
+require_once __DIR__ . '/app/config/auth.php'; 
+
+?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 
-    <head>
-        <?php include 'includes/geral/header.php'; ?>
-        <!-- CSS -->
-        <link rel="stylesheet" href="css/index.css">
-        <link rel="stylesheet" href="css/cards.css">
+<head>
+    <?php include 'includes/geral/header.php'; ?>
 
-        <!-- JS -->
-        <script src="js/index/carousel.js"></script>
-        <script src="js/perfil/login.js"></script>
-        <script src="js/perfil/cadastro.js"></script>
-    </head>
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/carousel.css">
 
-    <body class="user-select-none m-0 p-0">
+    <!-- JS -->
+    <script src="js/index/carousel.js"></script>
+    <script src="js/perfil/login.js"></script>
+    <script src="js/perfil/cadastro.js"></script>
+    <script src="js/perfil/logout.js"></script>
+</head>
 
-        <!-- NavBar -->
-        <?php include 'includes/index/navbar.php'; ?>
+<body class="d-flex flex-column min-vh-100 user-select-none">
 
-        <!-- Cards -->
-        <?php include 'includes/index/carousel.php'; ?>
-        
-        <!-- Produtos -->
-        <?php include 'includes/index/produtos.php'; ?> 
+    <!-- NavBar -->
+    <?php include 'includes/index/navbar.php'; ?>
 
-        <!-- Sobre -->
-        <?php include 'includes/index/sobre.php'; ?>
+    <!-- Cards -->
+    <?php include 'includes/index/carousel.php'; ?>
 
-        <!-- Onde estamos -->
-        <?php include 'includes/index/localizacao.php'; ?>
+    <main class="flex-fill">
+        <div class="container my-2">
 
-        <!-- Botão Whatsapp -->
-        <?php include 'includes/geral/whatsapp.php'; ?>
+            <!-- Produtos -->
+            <?php include 'includes/index/produtos.php'; ?>
 
-        <!-- Rodapé -->
-        <?php include 'includes/geral/footer.php'; ?>
+            <!-- Sobre -->
+            <?php /* include 'includes/index/sobre.php'; */ ?>
 
-    </body>
+            <!-- Onde estamos -->
+            <?php /* include 'includes/index/localizacao.php'; */ ?>
+        </div>
+    </main>
+
+    <!-- Botão Whatsapp -->
+    <?php include 'includes/index/whatsapp.php'; ?>
+
+    <!-- Rodapé -->
+    <?php include 'includes/geral/footer.php'; ?>
+
+</body>
 
 </html>

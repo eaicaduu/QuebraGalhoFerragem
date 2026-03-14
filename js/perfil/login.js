@@ -3,7 +3,7 @@ window.abrirLoginSwal = function () {
         html: `
             <div style="display:flex; justify-content:space-between; align-items:center; width:100%; margin-bottom:15px;">
                 <h4 class="mb-0">Acessar Conta</h4>
-                <button type="button" onclick="Swal.close()" style="background:none; border:none; font-size:20px; cursor:pointer;">
+                <button type="button" onclick="Swal.close()" style="background:none; border: 0; font-size:20px; cursor:pointer;">
                     <i class="fa fa-times text-dark" aria-hidden="true"></i>
                 </button>
             </div>
@@ -26,7 +26,7 @@ window.abrirLoginSwal = function () {
 
             <a href="#" id="recuperarSenha" class="text-dark text-decoration-none text-end" style="display:block; font-size:0.9rem; margin-bottom:15px;">Esqueci a senha</a>
                 
-            <button type="button" id="btnAcessar" class="btn btn-warning swal2-confirm fw-bold w-100 rounded-4" style="border:none; padding:10px;">Acessar</button>
+            <button type="button" id="btnAcessar" class="btn btn-warning fw-bold w-100 rounded-4" style="border:none; padding:10px;">Acessar</button>
 
                 <p style="margin-top:10px; font-size:1rem;">Não possui uma conta? <a onclick="abrirCadastroSwal()" style="cursor:pointer;" class="text-primary">Cadastre-se</a></p>
                 <p style="font-size:0.6rem; color:gray;">Acessando você concorda com o <a style="color:gray;">termo de uso</a></p>
@@ -58,11 +58,6 @@ window.abrirLoginSwal = function () {
                 }
             });
 
-            recuperarSenha.addEventListener('click', (e) => {
-                e.preventDefault();
-                abrirRecuperarSenhaSwal();
-            });
-
             btnAcessar.addEventListener('click', () => {
                 const email = emailInput.value.trim();
                 const senha = senhaInput.value.trim();
@@ -84,7 +79,8 @@ window.abrirLoginSwal = function () {
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded'
                     },
-                    body: new URLSearchParams({ email, senha })
+                    body: new URLSearchParams({ email, senha }),
+                    credentials: 'same-origin'
                 })
                     .then(response => response.json())
                     .then(data => {
@@ -96,8 +92,8 @@ window.abrirLoginSwal = function () {
                             switch (data.error) {
                                 case 'dados_incompletos': mensagem = 'Preencha todos os campos.'; break;
                                 case 'erro_conexao': mensagem = 'Erro de conexão com o banco.'; break;
-                                case 'email': mensagem = 'Email não encontrado.'; break;
-                                case 'senha': mensagem = 'Senha incorreta.'; break;
+                                case 'email_nao_encontrado': mensagem = 'Email não encontrado.'; break;
+                                case 'senha_incorreta': mensagem = 'Senha incorreta.'; break;
                                 default: mensagem = 'Erro desconhecido.';
                             }
                             Swal.showValidationMessage(mensagem);
@@ -110,26 +106,19 @@ window.abrirLoginSwal = function () {
                         console.error(error);
                     });
             });
+            emailInput.addEventListener('keydown', function (e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    senhaInput.focus();
+                }
+            });
+            
+            senhaInput.addEventListener('keydown', function (e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    btnAcessar.click();
+                }
+            });
         }
     });
-/*     function abrirRecuperarSenhaSwal() {
-        const numeroAdm = '5551985707136';
-        const linkWhats = `https://wa.me/${numeroAdm}?text=Olá!%20Preciso%20recuperar%20minha%20senha.`
-
-        Swal.fire({
-            icon: 'info',
-            title: 'Recuperar senha',
-            html: `
-            <p style="font-size:1rem; color:#333; margin-bottom:20px;">
-                Contate o administrador para recuperar sua senha.
-            </p>
-            <a href="${linkWhats}" target="_blank" class="btn btn-success w-100 rounded-4 fw-bold" style="text-decoration:none; padding:10px;">
-                <i class="fa-solid fa-commenting" aria-hidden="true"></i>
-                 Entrar em contato via WhatsApp
-            </a>
-        `,
-            showConfirmButton: false,
-            background: '#fff',
-        });
-    } */
 }

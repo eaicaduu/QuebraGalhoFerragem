@@ -1,14 +1,39 @@
+<?php
+$db = new Database();
+$pdo = $db->getConnection();
+
+$stmt = $pdo->query("SELECT * FROM carousel WHERE ativo = 1 ORDER BY id ASC");
+$imagens = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+if (empty($imagens)) {
+    $imagens = [
+        ['imagem' => 'images/carousel.png']
+    ];
+}
+?>
 <div id="carouselCards" class="carousel slide" data-bs-ride="carousel">
+
+    <div class="carousel-indicators">
+        <?php foreach ($imagens as $index => $banner): ?>
+            <button type="button" 
+                    data-bs-target="#carouselCards" 
+                    data-bs-slide-to="<?= $index ?>" 
+                    class="<?= $index === 0 ? 'active' : '' ?>" 
+                    aria-current="<?= $index === 0 ? 'true' : 'false' ?>" 
+                    aria-label="Slide <?= $index + 1 ?>">
+            </button>
+        <?php endforeach; ?>
+    </div>
+
     <div class="carousel-inner">
-
-        <?php for ($i = 1; $i <= 6; $i++): ?>
-            <div class="carousel-item <?= $i == 1 ? 'active' : '' ?>">
-                <img src="images/banner<?= $i ?>.png"
-                     class="d-block w-100 banner-carousel"
-                     alt="Banner <?= $i ?>">
+        <?php foreach ($imagens as $index => $banner): ?>
+            <div class="carousel-item <?= $index === 0 ? 'active' : '' ?>">
+                <div class="banner-wrapper">
+                    <img src="<?= htmlspecialchars($banner['imagem']) ?>" 
+                         class="banner-img d-block w-100 pe-none">
+                </div>
             </div>
-        <?php endfor; ?>
-
+        <?php endforeach; ?>
     </div>
 
     <button class="carousel-control-prev" type="button" data-bs-target="#carouselCards" data-bs-slide="prev">

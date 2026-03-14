@@ -17,6 +17,9 @@
   <meta property="og:type" content="website">
   <meta property="og:locale" content="pt_BR">
 
+  <!-- CSS Geral -->
+  <link rel="stylesheet" href="css/geral.css">
+
   <!-- Canonical (URL principal da página) -->
   <link rel="canonical" href="https://quebragalhoferragem.com.br/">
 
