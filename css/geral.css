@@ -11,7 +11,7 @@
     background-color: #218838 !important;
 }
 
-button:focus{
+button:focus {
     outline: none;
     box-shadow: none;
 }
@@ -28,7 +28,7 @@ button:focus{
 }
 
 .menu-link {
-    color: #ffffff !important; 
+    color: #ffffff !important;
     text-decoration: none;
 }
 
@@ -41,6 +41,30 @@ button:focus{
     transition: transform 0.3s ease;
 }
 
+.rotate-icon {
+    transition: transform 0.3s ease;
+}
+
 .rotate-icon.open {
     transform: rotate(-90deg);
+}
+
+.submenu-arrow {
+    transition: transform 0.3s ease;
+}
+
+.submenu-arrow.rotated {
+    transform: rotate(90deg);
+}
+
+.menu-link:hover {
+    color: #ffc107 !important;
+}
+
+.nav-link.small.menu-link {
+    opacity: 0.85;
+}
+
+.nav-link.small.menu-link:hover {
+    opacity: 1;
 }

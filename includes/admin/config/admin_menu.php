@@ -1,13 +1,20 @@
 <?php
-
 $menuItems = [
     [
-        'page' => 'dashboard',
+        'page' => 'painel',
         'icon' => 'fa-home',
         'label' => 'Painel',
-        'file' => 'includes/admin/pages/dashboard.php',
+        'file' => 'includes/admin/pages/painel_geral.php',
+        'children' => [
+            [
+                'page' => 'painel',
+                'acao' => 'geral',
+                'label' => 'Painel Geral',
+                'file' => 'includes/admin/pages/painel_geral.php',
+            ],
+        ],
     ],
-
+    
     [
         'page' => 'produtos',
         'icon' => 'fa-tag',
@@ -15,6 +22,7 @@ $menuItems = [
         'children' => [
             [
                 'page' => 'produtos',
+                'acao' => 'todos',
                 'label' => 'Todos produtos',
                 'file' => 'includes/admin/pages/produto_todos.php',
             ],
@@ -26,11 +34,13 @@ $menuItems = [
             ],
             [
                 'page' => 'categorias',
+                'acao' => 'categoria',
                 'label' => 'Categorias',
                 'file' => 'includes/admin/pages/categorias.php',
             ],
             [
                 'page' => 'importar',
+                'acao' => 'importar',
                 'label' => 'Importar',
                 'file' => 'includes/admin/pages/produto_importar.php',
             ],
@@ -41,14 +51,28 @@ $menuItems = [
         'page' => 'pedidos',
         'icon' => 'fa-box',
         'label' => 'Pedidos',
-        'file' => 'includes/admin/pages/pedidos.php',
+        'children' => [
+            [
+                'page' => 'pedidos',
+                'acao' => 'Todos pedidos',
+                'label' => 'Todos Pedidos',
+                'file' => 'includes/admin/pages/pedidos_todos.php',
+            ],
+        ],
     ],
 
     [
         'page' => 'usuarios',
         'icon' => 'fa-users',
         'label' => 'Usuários',
-        'file' => 'includes/admin/pages/usuarios.php',
+        'children' => [
+            [
+                'page' => 'usuarios',
+                'acao' => 'Todos usuarios',
+                'label' => 'Todos usuários',
+                'file' => 'includes/admin/pages/usuarios_todos.php',
+            ],
+        ],
     ],
 
     [

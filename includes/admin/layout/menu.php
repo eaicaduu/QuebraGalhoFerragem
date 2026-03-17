@@ -2,7 +2,8 @@
 
     <?php
     $hasChildren = !empty($item['children']);
-    $collapseId = 'menu_' . ($item['page'] ?? uniqid());
+    $menuPrefix = $menuPrefix ?? 'desktop';
+    $collapseId = $menuPrefix . '_menu_' . ($item['page'] ?? uniqid());
     $isParentActive = false;
 
     if ($hasChildren) {
@@ -27,14 +28,15 @@
             <a class="nav-link d-flex justify-content-between align-items-center <?= $isParentActive ? 'text-warning' : 'menu-link text-white' ?>"
                 data-bs-toggle="collapse" href="#<?= $collapseId ?>" role="button"
                 aria-expanded="<?= $isParentActive ? 'true' : 'false' ?>" aria-controls="<?= $collapseId ?>">
+
                 <span>
                     <i class="fa <?= $item['icon'] ?> me-2"></i><?= $item['label'] ?>
                 </span>
 
-                <i class="fa fa-chevron-down small"></i>
+                <i class="fa fa-chevron-down small submenu-arrow <?= $isParentActive ? 'rotated' : '' ?>"></i>
             </a>
 
-            <div class="collapse <?= $isParentActive ? 'show' : '' ?>" id="<?= $collapseId ?>">
+            <div class="collapse submenu-collapse <?= $isParentActive ? 'show' : '' ?>" id="<?= $collapseId ?>">
                 <div class="ms-4 mt-1 d-flex flex-column gap-1">
 
                     <?php foreach ($item['children'] as $child): ?>
@@ -45,7 +47,7 @@
                             $acao === ($child['acao'] ?? '');
                         ?>
 
-                        <a class="nav-link py-1 small <?= $childActive ? 'text-warning fw-bold' : 'text-white-50' ?>"
+                        <a class="nav-link py-1 small menu-link <?= $childActive ? 'text-warning' : 'text-white-50' ?>"
                             href="admin.php?page=<?= $child['page'] ?><?= !empty($child['acao']) ? '&acao=' . urlencode($child['acao']) : '' ?>">
                             <?= $child['label'] ?>
                         </a>

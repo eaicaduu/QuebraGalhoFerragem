@@ -21,5 +21,5 @@ function findAdminPageFile(array $menuItems, string $paginaAtual, string $acao =
         }
     }
 
-    return 'includes/admin/pages/dashboard.php';
+    return 'includes/admin/pages/painel_geral.php';
 }

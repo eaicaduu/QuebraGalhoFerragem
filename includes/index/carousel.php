@@ -1,9 +1,7 @@
 <?php
-$db = new Database();
-$pdo = $db->getConnection();
+require_once __DIR__ . '/../../app/models/carousel/carousel_listar.php';
 
-$stmt = $pdo->query("SELECT * FROM carousel WHERE ativo = 1 ORDER BY id ASC");
-$imagens = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$imagens = listarCarousel();
 
 if (empty($imagens)) {
     $imagens = [

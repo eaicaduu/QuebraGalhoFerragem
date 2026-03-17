@@ -6,7 +6,7 @@ $estoque = 0;
 $ativo = 1;
 ?>
 
-<div class="d-flex justify-content-between align-items-center mb-4">
+<div class="d-flex justify-content-between align-items-center">
     <div>
         <h3 class="mb-1">Novo Produto</h3>
         <small class="text-muted">Cadastre um novo produto</small>
@@ -14,10 +14,10 @@ $ativo = 1;
 </div>
 
 <div class="card shadow-sm border-0">
-    <div class="card-body p-4">
+    <div class="card-body">
 
         <form action="actions/admin/salvar_produto.php" method="POST" enctype="multipart/form-data">
-            <div class="row g-3">
+            <div class="row">
 
                 <div class="col-10">
                     <label for="nome" class="form-label fw-semibold">Nome do produto</label>

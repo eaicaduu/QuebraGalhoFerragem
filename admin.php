@@ -1,12 +1,14 @@
 <?php
 session_start();
 
-$paginaAtual = $_GET['page'] ?? 'dashboard';
-$acao = $_GET['acao'] ?? '';
+$paginaAtual = $_GET['page'] ?? 'painel';
+$acao = $_GET['acao'] ?? 'geral';
 
 require_once __DIR__ . '/app/config/database.php';
 require_once __DIR__ . '/app/config/migrations.php';
 require_once __DIR__ . '/app/config/auth.php';
+
+require_once __DIR__ . '/app/models/carousel/carousel_listar.php';
 
 if (!$user || !$isAdmin) {
     header('Location: index.php');
@@ -23,6 +25,9 @@ if (!$user || !$isAdmin) {
     <!-- JS -->
     <script src="js/perfil/logout.js"></script>
     <script src="js/admin/slidebar.js"></script>
+    <script src="js/admin/carousel/carousel_salvar.js"></script>
+    <script src="js/admin/carousel/carousel_editar.js"></script>
+    <script src="js/admin/carousel/carousel_deleta.js"></script>
 </head>
 
 <body class="d-flex flex-column min-vh-100 user-select-none">

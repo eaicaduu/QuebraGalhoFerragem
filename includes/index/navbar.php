@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg">
+<nav class="navbar navbar-expand-lg position-sticky top-0 bg-white z-3">
     <div class="container">
 
         <!-- Botão menu mobile -->
