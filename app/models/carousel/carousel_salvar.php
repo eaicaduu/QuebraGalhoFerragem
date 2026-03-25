@@ -72,7 +72,7 @@ try {
 
     echo json_encode([
         'status' => true,
-        'mensagem' => $salvas . ' imagem(ns) salva(s) com sucesso.'
+        'mensagem' => 'Imagem salva com sucesso.'
     ]);
     exit;
 

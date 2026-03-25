@@ -1,7 +1,26 @@
 <?php
-require_once __DIR__ . '/../../../app/models/carousel/carousel_listar.php';
+require_once __DIR__ . '/../../../app/models/geral/carousel_listar.php';
 
-$carousels = listarCarousel();
+$carousels = listarCarousel(false);
+
+$acao = $_GET['acao'] ?? 'carousel';
+$id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
+$modoEdicao = $acao === 'editar' && $id > 0;
+
+$carouselAtual = null;
+$imagemAtual = '';
+$ativoPadrao = 1;
+
+if ($modoEdicao) {
+    require_once __DIR__ . '/../../../app/models/carousel/carousel_buscar.php';
+
+    $carouselAtual = buscarCarousel($id);
+
+    if ($carouselAtual) {
+        $imagemAtual = $carouselAtual['imagem'] ?? '';
+        $ativoPadrao = isset($carouselAtual['ativo']) ? (int) $carouselAtual['ativo'] : 1;
+    }
+}
 ?>
 
 <div class="d-flex justify-content-between align-items-center mb-4">
@@ -14,23 +33,51 @@ $carousels = listarCarousel();
 <div class="card shadow-sm border-0 mb-4">
     <div class="card-body p-4">
 
-        <form id="formCarousel" method="POST" enctype="multipart/form-data">
-            <div class="row">
+        <form id="<?= $modoEdicao ? 'formEditarCarousel' : 'formCarousel' ?>" method="POST"
+            enctype="multipart/form-data">
+            <input type="hidden" name="id" value="<?= $modoEdicao ? $id : '' ?>">
+            <input type="hidden" name="modo" value="<?= $modoEdicao ? 'editar' : 'novo' ?>">
+            <input type="hidden" name="imagem_atual" value="<?= htmlspecialchars($imagemAtual) ?>">
 
-                <div class="col-12 mb-4">
-                    <label for="imagens" class="form-label fw-semibold">Adicionar imagens</label>
-                    <input type="file" name="imagens[]" id="imagens" class="form-control" accept="image/*" multiple>
-                    <div class="form-text">
-                        Você pode selecionar várias imagens de uma vez.
-                    </div>
+            <div class="row g-3">
+
+                <div class="col-12 mb-2">
+                    <label for="imagens" class="form-label fw-semibold">
+                        <?= $modoEdicao ? 'Alterar imagem' : 'Adicionar imagens' ?>
+                    </label>
+                    <input type="file" name="imagens[]" id="imagens" class="form-control" accept="image/*"
+                        <?= $modoEdicao ? '' : 'multiple' ?>>
                 </div>
 
-                <div class="col-md-4 mb-4">
-                    <label for="ativo_padrao" class="form-label fw-semibold">Status das novas imagens</label>
-                    <select name="ativo_padrao" id="ativo_padrao" class="form-select">
-                        <option value="1" selected>Ativo</option>
-                        <option value="0">Inativo</option>
-                    </select>
+                <div class="row">
+
+                    <!-- IMAGEM ATUAL -->
+                    <?php if ($modoEdicao && !empty($imagemAtual)): ?>
+                        <div class="col-12 col-md-4 mb-0 mb-lg2">
+                            <div class="border rounded p-3 bg-light h-100">
+                                <div class="card border-0 shadow-sm h-100">
+                                    <div class="card-body p-2">
+                                        <div class="border rounded bg-white p-2 text-center mb-2">
+                                            <img src="app/<?= htmlspecialchars($imagemAtual) ?>"
+                                                class="img-fluid rounded pe-none"
+                                                style="height:120px; width:100%; object-fit:cover;">
+                                        </div>
+                                        <div class="small text-muted text-truncate">
+                                            Imagem atual
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endif; ?>
+
+                    <!-- PREVIEW -->
+                    <div class="col-12 col-md-4">
+                        <div class="border rounded p-3 bg-light text-center d-none h-100" id="previewContainer">
+                            <div class="row" id="previewGrid"></div>
+                        </div>
+                    </div>
+
                 </div>
 
                 <div class="col-12">
@@ -38,34 +85,63 @@ $carousels = listarCarousel();
                 </div>
 
                 <div class="col-12">
-                    <div class="border rounded p-3 bg-light text-center d-none" id="previewContainer">
-                        <div class="row g-3" id="previewGrid"></div>
+                    <div class="row align-items-end">
+
+                        <div class="col-5 col-lg-3">
+                            <label for="ativo_padrao" class="form-label fw-semibold">Status da imagem</label>
+                            <select name="ativo_padrao" id="ativo_padrao" class="form-select form-select-sm">
+                                <option value="1" <?= $ativoPadrao === 1 ? 'selected' : '' ?>>Ativo</option>
+                                <option value="0" <?= $ativoPadrao === 0 ? 'selected' : '' ?>>Inativo</option>
+                            </select>
+                        </div>
+
+                        <div class="col d-flex justify-content-end gap-2">
+                            <button type="button" id="<?= $modoEdicao ? 'btnEditarCarousel' : 'btnSalvarCarousel' ?>"
+                                class="btn btn-sm <?= $modoEdicao ? 'btn-primary' : 'btn-success' ?>">
+                                <i class="fa fa-save me-1"></i>
+                                <span>
+                                    <?= $modoEdicao ? 'Atualizar' : 'Salvar' ?>
+                                </span>
+                            </button>
+
+                            <?php if ($modoEdicao): ?>
+                                <button type="button" id="btnEditarCancelar" class="btn btn-secondary btn-sm">
+                                    <i class="fa fa-times me-1"></i>
+                                    <span>Cancelar</span>
+                                </button>
+                            <?php endif; ?>
+                        </div>
+
                     </div>
                 </div>
-
-                <div class="col-12 pt-2">
-                    <div class="d-flex flex-column flex-md-row gap-2">
-                        <button type="button" id="btnSalvarCarousel" class="btn btn-success">
-                            <i class="fa fa-save me-2"></i>Salvar imagens
-                        </button>
-
-                        <a href="admin.php?page=configuracoes&acao=carousel" class="btn btn-secondary">
-                            Cancelar
-                        </a>
-                    </div>
-                </div>
-
             </div>
         </form>
-
     </div>
 </div>
 
 <div class="d-flex justify-content-between align-items-center mb-3">
+
     <div>
         <h4 class="mb-1">Imagens cadastradas</h4>
-        <small class="text-muted"><?= count($carousels) ?> imagem(ns) no carousel</small>
+        <small class="text-muted" id="contadorCarousel">
+            <?= count($carousels) ?> imagem(ns) no carousel
+        </small>
     </div>
+
+    <div class="d-flex gap-3">
+
+        <button type="button" id="btnSelecionarEditarCarousel"
+            class="btn btn-dark btn-sm <?= empty($carousels) ? 'disabled opacity-50' : '' ?>" <?= empty($carousels) ? 'disabled' : '' ?>>
+            <i class="fa fa-edit me-1"></i>Editar
+        </button>
+
+        <button type="button" id="btnSelecionarExcluirCarousel"
+            class="btn btn-danger btn-sm <?= empty($carousels) ? 'disabled opacity-50' : '' ?>" <?= empty($carousels) ? 'disabled' : '' ?>>
+            <i class="fa fa-trash me-1"></i>Excluir
+        </button>
+
+    </div>
+
 </div>
 
 <?php if (empty($carousels)): ?>
@@ -80,80 +156,49 @@ $carousels = listarCarousel();
 
     <div class="d-flex flex-column gap-3">
 
-        <?php foreach ($carousels as $item): ?>
-            <?php
-            $imagemRelativa = $item['imagem'] ?? '';
+        <div class="card shadow-sm border-0 mb-4">
+            <div class="card-body">
 
-            $baseProjeto = dirname(__DIR__, 3);
-            $caminhoImagem = $baseProjeto . '/' . 'app' . '/' . ltrim($imagemRelativa, '/');
-            $caminhoImagem = str_replace(['/', '\\'], DIRECTORY_SEPARATOR, $caminhoImagem);
+                <div class="row g-3">
+                    <?php foreach ($carousels as $item): ?>
+                        <?php
+                        $imagemRelativa = $item['imagem'] ?? '';
+                        $ativo = (int) ($item['ativo'] ?? 1);
+                        $criadoEm = $item['criado_em'] ?? null;
 
-            $imagemExiste = !empty($imagemRelativa) && file_exists($caminhoImagem);
-            ?>
+                        $dataFormatada = $criadoEm
+                            ? date('d/m/Y', strtotime($criadoEm))
+                            : '';
+                        ?>
 
-            <div class="card border-0 shadow-sm">
-                <div class="card-body">
-                    <div class="row align-items-center">
+                        <div class="col-6 col-md-4 col-lg-3" data-carousel-id="<?= $carousel['id'] ?>">
+                            <div class="carousel-item-select border rounded p-2 text-center h-100 position-relative"
+                                data-id="<?= (int) $item['id'] ?>" style="cursor:pointer;">
+                                <span class="position-absolute top-0 end-0 m-1 badge d-flex align-items-center gap-1 
+                                    <?= $ativo ? 'bg-success' : 'bg-secondary' ?>" style="font-size:10px;">
+                                    <?php if ($dataFormatada): ?>
+                                        <i class="fa fa-calendar"></i>
+                                        <?= $dataFormatada ?>
+                                    <?php endif; ?>
 
-                        <div class="col-12 col-md-2">
-                            <div class="border rounded bg-light p-2 text-center">
-                                <?php if ($imagemExiste): ?>
-                                    <img src="<?= htmlspecialchars($imagemRelativa) ?>" alt="Imagem do carousel"
-                                        class="img-fluid rounded" style="max-height: 90px; object-fit: cover;">
-                                <?php else: ?>
-                                    <div class="text-muted small py-4">Sem imagem</div>
-                                <?php endif; ?>
+                                </span>
+
+                                <div class="carousel-select-overlay d-none">
+                                    Selecionar
+                                </div>
+
+                                <img src="app/<?= htmlspecialchars($imagemRelativa) ?>" class="img-fluid rounded pe-none mb-1"
+                                    style="height: 110px; width: 100%; object-fit: cover;">
+
                             </div>
                         </div>
 
-                        <div class="col-12 col-md-3">
-                            <div class="text-muted small">
-                                <?= htmlspecialchars(basename($imagemRelativa)) ?>
-                            </div>
-
-                            <div class="text-muted small mt-1">
-                                Caminho: <?= htmlspecialchars($imagemRelativa) ?>
-                            </div>
-
-                            <div class="text-muted small">
-                                Físico: <?= htmlspecialchars($caminhoImagem) ?>
-                            </div>
-                        </div>
-
-                        <div class="col-6 col-md-2">
-                            <small class="text-muted d-block">Status</small>
-                            <?php if ((int) $item['ativo'] === 1): ?>
-                                <span class="badge bg-success">Ativo</span>
-                            <?php else: ?>
-                                <span class="badge bg-secondary">Inativo</span>
-                            <?php endif; ?>
-                        </div>
-
-                        <div class="col-6 col-md-3">
-                            <small class="text-muted d-block">Criado em</small>
-                            <div>
-                                <?= !empty($item['criado_em']) ? date('d/m/Y H:i', strtotime($item['criado_em'])) : '-' ?>
-                            </div>
-                        </div>
-
-                        <div class="col-12 col-md-2 text-md-end">
-                            <div class="d-flex flex-wrap justify-content-md-end gap-2">
-                                <a href="admin.php?page=configuracoes&acao=carousel_editar&id=<?= (int) $item['id'] ?>"
-                                    class="btn btn-dark btn-sm">
-                                    <i class="fa fa-edit"></i>
-                                </a>
-
-                                <a href="admin.php?page=configuracoes&acao=carousel_excluir&id=<?= (int) $item['id'] ?>"
-                                    class="btn btn-danger btn-sm">
-                                    <i class="fa fa-trash"></i>
-                                </a>
-                            </div>
-                        </div>
-
-                    </div>
+                    <?php endforeach; ?>
                 </div>
             </div>
-        <?php endforeach; ?>
+
+        </div>
+    </div>
 
     </div>
 

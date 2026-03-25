@@ -75,6 +75,11 @@ window.abrirCadastroSwal = function () {
 
             });
             btnCadastrar.addEventListener('click', () => {
+                const popup = Swal.getPopup();
+
+                const nome = popup.querySelector('#nome').value.trim();
+                const email = popup.querySelector('#emailCadastro').value.trim();
+                const senha = popup.querySelector('#senhaCadastro').value.trim();
 
                 if (!nome || !email || !senha) {
                     Swal.showValidationMessage('Por favor, preencha todos os campos.');
@@ -111,7 +116,7 @@ window.abrirCadastroSwal = function () {
                                 fetch('./app/models/perfil/login.php', {
                                     method: 'POST',
                                     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                                    body: new URLSearchParams({ email, senha })
+                                    body: new URLSearchParams({nome, email, senha })
                                 }).then(response => response.json())
                                     .then(loginData => {
                                         if (loginData.success) {

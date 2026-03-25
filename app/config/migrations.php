@@ -17,12 +17,6 @@ function runMigrations($conn)
     ");
 
     $conn->exec("
-        ALTER TABLE usuarios
-        ADD COLUMN IF NOT EXISTS tipo_usuario TINYINT NOT NULL DEFAULT 1 AFTER senha,
-        ADD COLUMN IF NOT EXISTS atualizado_em TIMESTAMP NULL DEFAULT NULL AFTER criado_em
-    ");
-
-    $conn->exec("
         CREATE TABLE IF NOT EXISTS carousel (
             id INT AUTO_INCREMENT PRIMARY KEY,
             imagem VARCHAR(255) NOT NULL,
@@ -52,6 +46,7 @@ function runMigrations($conn)
         CREATE TABLE IF NOT EXISTS produtos (
             id INT AUTO_INCREMENT PRIMARY KEY,
             nome VARCHAR(255) NOT NULL,
+            codigo VARCHAR(50) NULL,
             descricao TEXT NULL,
             preco DECIMAL(10,2) NOT NULL DEFAULT 0,
             preco_pj DECIMAL(10,2) DEFAULT NULL,
@@ -62,10 +57,5 @@ function runMigrations($conn)
             atualizado_em TIMESTAMP NULL DEFAULT NULL
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
     ");
-
-    $conn->exec("
-        ALTER TABLE produtos
-        ADD COLUMN IF NOT EXISTS preco_pj DECIMAL(10,2) DEFAULT NULL AFTER preco
-    ");
-
+    
 }

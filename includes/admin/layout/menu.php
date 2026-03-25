@@ -6,14 +6,25 @@
     $collapseId = $menuPrefix . '_menu_' . ($item['page'] ?? uniqid());
     $isParentActive = false;
 
+    if (isset($item['visible']) && is_callable($item['visible']) && !$item['visible']()) {
+        continue;
+    }
+
+    $visibleChildren = [];
+
     if ($hasChildren) {
         foreach ($item['children'] as $child) {
+            if (isset($child['visible']) && is_callable($child['visible']) && !$child['visible']()) {
+                continue;
+            }
+
+            $visibleChildren[] = $child;
+
             $childPage = $child['page'] ?? '';
             $childAcao = $child['acao'] ?? '';
 
             if ($paginaAtual === $childPage && $acao === $childAcao) {
                 $isParentActive = true;
-                break;
             }
         }
     } else {
@@ -25,8 +36,11 @@
 
         <?php if ($hasChildren): ?>
 
+            <?php if (empty($visibleChildren))
+                continue; ?>
+
             <a class="nav-link d-flex justify-content-between align-items-center <?= $isParentActive ? 'text-warning' : 'menu-link text-white' ?>"
-                data-bs-toggle="collapse" href="#<?= $collapseId ?>" role="button"
+                data-bs-toggle="collapse" draggable="false" href="#<?= $collapseId ?>" role="button"
                 aria-expanded="<?= $isParentActive ? 'true' : 'false' ?>" aria-controls="<?= $collapseId ?>">
 
                 <span>
@@ -39,7 +53,7 @@
             <div class="collapse submenu-collapse <?= $isParentActive ? 'show' : '' ?>" id="<?= $collapseId ?>">
                 <div class="ms-4 mt-1 d-flex flex-column gap-1">
 
-                    <?php foreach ($item['children'] as $child): ?>
+                    <?php foreach ($visibleChildren as $child): ?>
 
                         <?php
                         $childActive =
@@ -47,7 +61,7 @@
                             $acao === ($child['acao'] ?? '');
                         ?>
 
-                        <a class="nav-link py-1 small menu-link <?= $childActive ? 'text-warning' : 'text-white-50' ?>"
+                        <a class="nav-link py-1 small menu-link <?= $childActive ? 'text-warning' : 'text-white-50' ?>" draggable="false"
                             href="admin.php?page=<?= $child['page'] ?><?= !empty($child['acao']) ? '&acao=' . urlencode($child['acao']) : '' ?>">
                             <?= $child['label'] ?>
                         </a>
@@ -60,7 +74,7 @@
         <?php else: ?>
 
             <a class="nav-link <?= $isParentActive ? 'text-warning' : 'menu-link text-white' ?>"
-                href="admin.php?page=<?= $item['page'] ?>">
+                href="admin.php?page=<?= $item['page'] ?>" draggable="false">
                 <i class="fa <?= $item['icon'] ?> me-2"></i><?= $item['label'] ?>
             </a>
 

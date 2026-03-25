@@ -23,7 +23,7 @@ require_once __DIR__ . '/app/config/auth.php';
 <body class="d-flex flex-column min-vh-100 user-select-none">
 
     <!-- NavBar -->
-    <?php include 'includes/index/navbar.php'; ?>
+    <?php include 'includes/geral/navbar.php'; ?>
 
     <main class="flex-fill">
         <div class="container my-2">

@@ -1,13 +1,14 @@
 <?php
 session_start();
+header('Content-Type: application/json');
 
 unset(
     $_SESSION['import_headers'],
     $_SESSION['import_rows'],
     $_SESSION['import_preview_produtos'],
-    $_SESSION['import_arquivo_nome'],
-    $_SESSION['import_erro']
+    $_SESSION['import_arquivo_nome']
 );
 
-header('Location: ../../../admin.php?page=importar&acao=importar');
-exit;
+echo json_encode([
+    'status' => true
+]);

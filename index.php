@@ -26,7 +26,7 @@ require_once __DIR__ . '/app/config/auth.php';
 <body class="d-flex flex-column min-vh-100 user-select-none">
 
     <!-- NavBar -->
-    <?php include 'includes/index/navbar.php'; ?>
+    <?php include 'includes/geral/navbar.php'; ?>
 
     <!-- Cards -->
     <?php include 'includes/index/carousel.php'; ?>
@@ -35,7 +35,7 @@ require_once __DIR__ . '/app/config/auth.php';
         <div class="container my-2">
 
             <!-- Produtos -->
-            <?php include 'includes/index/produtos.php'; ?>
+            <?php include 'includes/geral/produtos.php'; ?>
 
             <!-- Sobre -->
             <?php /* include 'includes/index/sobre.php'; */ ?>

@@ -3,6 +3,7 @@
 function findAdminPageFile(array $menuItems, string $paginaAtual, string $acao = ''): string
 {
     foreach ($menuItems as $item) {
+
         if (!empty($item['children'])) {
             foreach ($item['children'] as $child) {
                 $childPage = $child['page'] ?? '';

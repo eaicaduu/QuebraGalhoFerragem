@@ -14,16 +14,19 @@ require_once __DIR__ . '/app/config/auth.php';
     <?php include 'includes/geral/header.php'; ?>
 
     <!-- JS -->
+    <script src="js/geral/pesquisar.js"></script>
     <script src="js/perfil/logout.js"></script>
 </head>
 
 <body class="d-flex flex-column min-vh-100 user-select-none">
 
     <!-- NavBar -->
-    <?php include 'includes/index/navbar.php'; ?>
+    <?php include 'includes/geral/navbar.php'; ?>
 
     <main class="flex-fill">
         <div class="container my-2">
+            <!-- Barra Pesquisa -->
+            <?php include 'includes/geral/pesquisar.php'; ?>
         </div>
     </main>
 

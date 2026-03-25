@@ -1,39 +1,44 @@
 <?php
 session_start();
 
-require_once __DIR__ . '../../../../app/config/vendor/autoload.php';
+require_once __DIR__ . '../../../config/vendor/autoload.php';
 
 use Smalot\PdfParser\Parser;
 
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    header('Location: ../../../admin.php?page=importar&acao=importar');
-    exit;
-}
-
-unset(
-    $_SESSION['import_headers'],
-    $_SESSION['import_rows'],
-    $_SESSION['import_preview_produtos'],
-    $_SESSION['import_arquivo_nome'],
-    $_SESSION['import_erro']
-);
-
-if (empty($_FILES['arquivo_importacao']['name'])) {
-    $_SESSION['import_erro'] = 'Selecione um arquivo para importar.';
-    header('Location: ../../../admin.php?page=importar&acao=importar');
-    exit;
-}
-
-$arquivo = $_FILES['arquivo_importacao'];
-$ext = strtolower(pathinfo($arquivo['name'], PATHINFO_EXTENSION));
-
-if (!in_array($ext, ['pdf', 'txt'], true)) {
-    $_SESSION['import_erro'] = 'Formato inválido. Envie apenas PDF ou TXT.';
-    header('Location: ../../../admin.php?page=importar&acao=importar');
-    exit;
-}
+header('Content-Type: application/json; charset=utf-8');
 
 try {
+    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+        throw new RuntimeException('Requisição inválida.');
+    }
+
+    if (
+        !isset($_FILES['arquivo_importacao']) ||
+        !is_array($_FILES['arquivo_importacao']) ||
+        empty($_FILES['arquivo_importacao']['name'])
+    ) {
+        throw new RuntimeException('Selecione um arquivo para importar.');
+    }
+
+    $arquivo = $_FILES['arquivo_importacao'];
+
+    if (!isset($arquivo['error']) || $arquivo['error'] !== UPLOAD_ERR_OK) {
+        throw new RuntimeException('Falha no envio do arquivo.');
+    }
+
+    $ext = strtolower(pathinfo((string) $arquivo['name'], PATHINFO_EXTENSION));
+
+    if (!in_array($ext, ['pdf', 'txt'], true)) {
+        throw new RuntimeException('Formato inválido. Envie apenas PDF ou TXT.');
+    }
+
+    unset(
+        $_SESSION['import_headers'],
+        $_SESSION['import_rows'],
+        $_SESSION['import_preview_produtos'],
+        $_SESSION['import_arquivo_nome']
+    );
+
     if ($ext === 'pdf') {
         $parser = new Parser();
         $pdf = $parser->parseFile($arquivo['tmp_name']);
@@ -42,31 +47,38 @@ try {
         $texto = file_get_contents($arquivo['tmp_name']);
     }
 
-    if (!$texto || trim($texto) === '') {
+    if (!is_string($texto) || trim($texto) === '') {
         throw new RuntimeException('Não foi possível ler o conteúdo do arquivo.');
     }
 
     $linhas = preg_split('/\r\n|\r|\n/', $texto);
-    $linhas = array_map(fn($l) => trim((string) $l), $linhas);
-    $linhas = array_values(array_filter($linhas, fn($l) => $l !== ''));
+    $linhas = array_map(
+        static fn($linha) => trim((string) $linha),
+        $linhas ?: []
+    );
+    $linhas = array_values(array_filter(
+        $linhas,
+        static fn($linha) => $linha !== ''
+    ));
 
     if (empty($linhas)) {
         throw new RuntimeException('O arquivo não possui linhas válidas.');
     }
 
     $headerIndex = null;
+
     foreach ($linhas as $i => $linha) {
-        if (
-            mb_stripos($linha, 'código') !== false ||
-            mb_stripos($linha, 'codigo') !== false
-        ) {
-            if (
-                mb_stripos($linha, 'descrição') !== false ||
-                mb_stripos($linha, 'descricao') !== false
-            ) {
-                $headerIndex = $i;
-                break;
-            }
+        $linhaNormalizada = mb_strtolower($linha, 'UTF-8');
+
+        $temCodigo = mb_stripos($linhaNormalizada, 'código') !== false
+            || mb_stripos($linhaNormalizada, 'codigo') !== false;
+
+        $temDescricao = mb_stripos($linhaNormalizada, 'descrição') !== false
+            || mb_stripos($linhaNormalizada, 'descricao') !== false;
+
+        if ($temCodigo && $temDescricao) {
+            $headerIndex = $i;
+            break;
         }
     }
 
@@ -83,7 +95,7 @@ try {
 
     $rows = [];
 
-    for ($i = $headerIndex + 1; $i < count($linhas); $i++) {
+    for ($i = $headerIndex + 1, $totalLinhas = count($linhas); $i < $totalLinhas; $i++) {
         $linha = limparLinhaImportacao($linhas[$i]);
 
         if ($linha === '') {
@@ -102,6 +114,7 @@ try {
 
         if (count($colunas) < count($headers)) {
             $faltando = count($headers) - count($colunas);
+
             for ($j = 0; $j < $faltando; $j++) {
                 $colunas[] = '';
             }
@@ -112,6 +125,7 @@ try {
         }
 
         $temConteudo = false;
+
         foreach ($colunas as $valor) {
             if (trim((string) $valor) !== '') {
                 $temConteudo = true;
@@ -132,12 +146,21 @@ try {
     $_SESSION['import_rows'] = $rows;
     $_SESSION['import_arquivo_nome'] = $arquivo['name'];
 
-    header('Location: ../../../admin.php?page=importar&acao=importar');
+    echo json_encode([
+        'status' => 'success',
+        'mensagem' => 'Arquivo processado com sucesso.',
+        'quantidade_linhas' => count($rows),
+        'visualizar_url' => 'admin.php?page=importar&acao=visualizar'
+    ], JSON_UNESCAPED_UNICODE);
     exit;
 
 } catch (Throwable $e) {
-    $_SESSION['import_erro'] = $e->getMessage();
-    header('Location: ../../../admin.php?page=importar&acao=importar');
+    http_response_code(400);
+
+    echo json_encode([
+        'status' => 'error',
+        'mensagem' => $e->getMessage()
+    ], JSON_UNESCAPED_UNICODE);
     exit;
 }
 
@@ -150,6 +173,10 @@ function limparLinhaImportacao(string $linha): string
 function dividirColunas(string $linha): array
 {
     $partes = preg_split('/\s{2,}|\t+/', trim($linha));
-    $partes = array_map(fn($p) => trim((string) $p), $partes);
+    $partes = array_map(
+        static fn($parte) => trim((string) $parte),
+        $partes ?: []
+    );
+
     return array_values($partes);
 }

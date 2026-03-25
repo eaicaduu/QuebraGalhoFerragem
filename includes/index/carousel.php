@@ -1,9 +1,14 @@
 <?php
-require_once __DIR__ . '/../../app/models/carousel/carousel_listar.php';
+require_once __DIR__ . '/../../app/models/geral/carousel_listar.php';
 
-$imagens = listarCarousel();
+try {
+    $imagens = listarCarousel(true);
 
-if (empty($imagens)) {
+    if (!is_array($imagens) || empty($imagens)) {
+        throw new Exception("Sem imagens");
+    }
+
+} catch (Throwable $e) {
     $imagens = [
         ['imagem' => 'images/carousel.png']
     ];
@@ -27,8 +32,9 @@ if (empty($imagens)) {
         <?php foreach ($imagens as $index => $banner): ?>
             <div class="carousel-item <?= $index === 0 ? 'active' : '' ?>">
                 <div class="banner-wrapper">
-                    <img src="<?= htmlspecialchars($banner['imagem']) ?>" 
-                         class="banner-img d-block w-100 pe-none">
+                    <img src="app/<?= htmlspecialchars($banner['imagem']) ?>" 
+                         class="banner-img d-block w-100 pe-none"
+                         onerror="this.onerror=null;this.src='images/carousel.png';">
                 </div>
             </div>
         <?php endforeach; ?>

@@ -1,16 +1,7 @@
 <?php
+require_once __DIR__ . '/../../../app/models/geral/produto_listar.php';
 
-$db = new Database();
-$pdo = $db->getConnection();
-
-$stmt = $pdo->prepare("
-    SELECT id, nome, preco, estoque, criado_em
-    FROM produtos
-    ORDER BY id DESC
-");
-
-$stmt->execute();
-$produtos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$produtos = listarProdutos();
 ?>
 
 <div class="d-flex justify-content-between align-items-center mb-4">
@@ -22,104 +13,81 @@ $produtos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 </div>
 
-<div class="card shadow-sm border-0">
+<div class="d-flex flex-column gap-3">
+    <div class="card border-0">
 
-    <div class="card-body">
+        <div class="border rounded p-3" style="max-height: 40vh; overflow-y: auto;">
 
-        <input type="text" class="form-control mb-3" placeholder="Pesquisar produto...">
+            <div class="card-body p-0">
 
-        <?php if (empty($produtos)): ?>
+                <?php if (empty($produtos)): ?>
 
-            <div class="text-center py-5 text-muted">
-                Nenhum produto encontrado
-            </div>
+                    <div class="text-center py-5 text-muted">
+                        Nenhum produto encontrado
+                    </div>
 
-        <?php else: ?>
+                <?php else: ?>
 
-            <?php foreach ($produtos as $produto): ?>
+                    <?php foreach ($produtos as $produto): ?>
 
-                <div class="card border-0 shadow-sm mb-3">
-                    <div class="card-body">
+                        <div class="card border-0 bg-body-secondary mb-2">
+                            <div class="card-body py-2 px-3">
 
-                        <div class="row align-items-center">
+                                <div class="d-flex align-items-center justify-content-between">
 
-                            <div class="col-md-3 mb-2 mb-md-0">
+                                    <div class="d-flex align-items-center gap-3">
 
-                                <strong><?= htmlspecialchars($produto['nome']) ?></strong>
+                                        <div style="width:50px; height:50px;">
+                                            <?php if (!empty($produto['imagem'])): ?>
+                                                <img src="app/<?= htmlspecialchars($produto['imagem']) ?>"
+                                                    class="img-fluid rounded"
+                                                    style="width:50px; height:50px; object-fit:cover;">
+                                            <?php else: ?>
+                                                <div class="bg-light rounded d-flex align-items-center justify-content-center"
+                                                    style="width:50px; height:50px;">
+                                                    <i class="fa fa-image text-muted"></i>
+                                                </div>
+                                            <?php endif; ?>
+                                        </div>
 
-                                <div class="text-muted small">
-                                    ID #<?= $produto['id'] ?>
+                                        <div>
+                                            <div class="fw-semibold">
+                                                <?= htmlspecialchars($produto['nome']) ?>
+                                            </div>
+                                            <small class="text-muted">
+                                                Id <?= $produto['id'] ?>
+                                            </small>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="d-flex gap-2">
+
+                                        <a href="admin.php?page=produtos&acao=editar&id=<?= $produto['id'] ?>"
+                                            class="btn btn-dark btn-sm">
+                                            <i class="fa fa-edit"></i>
+                                        </a>
+
+                                        <button type="button"
+                                            class="btn btn-dark btn-sm btn-excluir-produto"
+                                            data-id="<?= $produto['id'] ?>">
+                                            <i class="fa fa-trash"></i>
+                                        </button>
+
+                                    </div>
+
                                 </div>
 
                             </div>
-
-                            <div class="col-md-2 mb-2 mb-md-0">
-
-                                <span class="fw-bold text-primary">
-                                    R$ <?= number_format($produto['preco'], 2, ',', '.') ?>
-                                </span>
-
-                            </div>
-
-                            <div class="col-md-2 mb-2 mb-md-0">
-
-                                <?php if ($produto['estoque'] > 10): ?>
-
-                                    <span class="badge bg-success">
-                                        <?= $produto['estoque'] ?> unidades
-                                    </span>
-
-                                <?php elseif ($produto['estoque'] > 0): ?>
-
-                                    <span class="badge bg-warning text-dark">
-                                        <?= $produto['estoque'] ?> baixo
-                                    </span>
-
-                                <?php else: ?>
-
-                                    <span class="badge bg-danger">
-                                        Sem estoque
-                                    </span>
-
-                                <?php endif; ?>
-
-                            </div>
-
-                            <div class="col-md-3 mb-2 mb-md-0">
-
-                                <small class="text-muted">
-                                    Criado em
-                                </small>
-
-                                <div>
-                                    <?= date('d/m/Y', strtotime($produto['criado_em'])) ?>
-                                </div>
-
-                            </div>
-
-                            <div class="col-md-2 text-md-end">
-
-                                <a href="admin.php?page=produtos&acao=editar&id=<?= $produto['id'] ?>"
-                                    class="btn btn-dark btn-sm">
-                                    <i class="fa fa-edit"></i>
-                                </a>
-
-                                <a href="admin.php?page=produtos&acao=excluir&id=<?= $produto['id'] ?>"
-                                    class="btn btn-dark btn-sm">
-                                    <i class="fa fa-trash"></i>
-                                </a>
-
-                            </div>
-
                         </div>
 
-                    </div>
-                </div>
+                    <?php endforeach; ?>
 
-            <?php endforeach; ?>
+                <?php endif; ?>
 
-        <?php endif; ?>
+            </div>
+
+        </div>
 
     </div>
-
 </div>

@@ -18,7 +18,7 @@ if (isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] === true) 
 
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    if ($user && in_array($user['tipo_usuario'], [2,3])) {
+    if (isset($user) && in_array($user['tipo_usuario'], [2,3])) {
         $isAdmin = true;
     }
 }
