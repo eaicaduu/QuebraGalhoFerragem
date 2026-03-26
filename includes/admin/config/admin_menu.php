@@ -103,7 +103,7 @@ $menuItems = [
             [
                 'page' => 'configuracoes',
                 'acao' => 'carousel',
-                'label' => 'Carousel',
+                'label' => 'Imagens Carousel',
                 'file' => 'includes/admin/pages/configuracoes_carousel.php',
             ],
             [

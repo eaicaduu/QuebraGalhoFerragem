@@ -39,7 +39,7 @@ function salvarCampo(campo) {
         status.style.display = 'block';
         status.classList.remove('text-success');
         status.classList.add('text-danger');
-        status.textContent = `O campo "${campo}" não pode ficar vazio.`;
+        status.textContent = `${window.formatarMaiusucla(campo)} não pode ficar vazio.`;
         return;
     } else {
         input.classList.remove('is-invalid');
@@ -62,14 +62,14 @@ function salvarCampo(campo) {
             if (data.success) {
                 status.classList.remove('text-danger');
                 status.classList.add('text-success');
-                status.textContent = `Campo "${campo}" atualizado com sucesso!`;
+                status.textContent = `${window.formatarMaiusucla(campo)} atualizado com sucesso!`;
 
                 input.dataset.originalValue = valor;
                 checkIcon.classList.remove('show');
             } else {
                 status.classList.remove('text-success');
                 status.classList.add('text-danger');
-                status.textContent = data.message || `Erro ao atualizar "${campo}".`;
+                status.textContent = data.message || `Erro ao atualizar ${window.formatarMaiusucla(campo)}.`;
             }
 
             setTimeout(() => { status.style.display = 'none'; }, 2500);

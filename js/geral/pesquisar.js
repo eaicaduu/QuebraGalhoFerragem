@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     let timeout = null;
+    const contexto = input.dataset.contexto || 'usuario';
 
     function mostrarLoading() {
         resultadoProdutos.innerHTML = `
@@ -20,7 +21,13 @@ document.addEventListener('DOMContentLoaded', function () {
         mostrarLoading();
 
         try {
-            const response = await fetch('./app/models/geral/produto_pesquisar.php?pesquisa=' + encodeURIComponent(termo));
+            const response = await fetch(
+                './app/models/geral/produto_pesquisar.php?pesquisa='
+                + encodeURIComponent(termo)
+                + '&contexto='
+                + encodeURIComponent(contexto)
+            );
+
             const data = await response.json();
 
             if (!response.ok || !data.status) {

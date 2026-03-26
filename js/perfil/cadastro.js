@@ -120,7 +120,7 @@ window.abrirCadastroSwal = function () {
                                 }).then(response => response.json())
                                     .then(loginData => {
                                         if (loginData.success) {
-                                            window.location.reload();
+                                            window.location.href = 'index.php';
                                         }
                                     });
                             });

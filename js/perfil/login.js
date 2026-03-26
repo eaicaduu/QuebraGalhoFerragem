@@ -86,7 +86,7 @@ window.abrirLoginSwal = function () {
                     .then(data => {
                         Swal.hideLoading();
                         if (data.success) {
-                            window.location.reload();
+                             window.location.href = 'index.php';
                         } else {
                             let mensagem = '';
                             switch (data.error) {

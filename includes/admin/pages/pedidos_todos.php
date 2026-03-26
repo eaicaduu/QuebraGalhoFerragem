@@ -2,7 +2,6 @@
 $db = new Database();
 $pdo = $db->getConnection();
 
-
 $stmt = $pdo->prepare("
     SELECT 
         p.id,

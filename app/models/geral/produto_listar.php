@@ -1,5 +1,5 @@
 <?php
-function listarProdutos(?string $pesquisa = null): array
+function listarProdutos(?string $pesquisa = null, string $contexto = 'usuario'): array
 {
     $db = new Database();
     $pdo = $db->getConnection();
@@ -15,10 +15,14 @@ function listarProdutos(?string $pesquisa = null): array
     $sql = "
         SELECT *
         FROM produtos
-        WHERE ativo = 1
+        WHERE 1 = 1
     ";
 
     $params = [];
+
+    if ($contexto === 'usuario') {
+        $sql .= " AND ativo = 1";
+    }
 
     if ($pesquisa !== '') {
         $sql .= "

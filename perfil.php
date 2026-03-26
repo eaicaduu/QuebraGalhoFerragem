@@ -18,6 +18,7 @@ require_once __DIR__ . '/app/config/auth.php';
     <script src="js/perfil/logout.js"></script>
 
     <script src="js/utils/telefone.js"></script>
+    <script src="js/utils/maiuscula.js"></script>
 </head>
 
 <body class="d-flex flex-column min-vh-100 user-select-none">

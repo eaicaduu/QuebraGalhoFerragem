@@ -1,6 +1,6 @@
 <div class="card border-0 mb-3">
     <div class="card-body p-2">
-        <label for="inputPesquisarProduto" class="form-label fw-semibold mb-2">
+        <label for="inputPesquisarProduto" data-contexto="usuario" class="form-label fw-semibold mb-2">
             Pesquisar produtos
         </label>
 

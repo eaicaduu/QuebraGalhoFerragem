@@ -30,7 +30,7 @@ $formId = $modoEdicao ? 'formEditarProduto' : 'formNovoProduto';
 $btnId = $modoEdicao ? 'btnEditarProduto' : 'btnSalvarProduto';
 ?>
 
-<div class="d-flex justify-content-between align-items-center">
+<div class="d-flex justify-content-between align-items-center mb-4">
     <div>
         <h3 class="mb-1"><?= $modoEdicao ? 'Editar Produto' : 'Novo Produto' ?></h3>
         <small class="text-muted">
@@ -49,13 +49,13 @@ $btnId = $modoEdicao ? 'btnEditarProduto' : 'btnSalvarProduto';
 
             <div class="row">
 
-                <div class="col-10">
+                <div class="col-12 col-md-9">
                     <label for="nome" class="form-label fw-semibold">Nome do produto</label>
                     <input type="text" class="form-control" id="nome" name="nome" placeholder="Digite o nome do produto"
                         value="<?= htmlspecialchars($nome) ?>" required>
                 </div>
 
-                <div class="col-md-2">
+                <div class="col-6 col-md-3">
                     <label for="ativo" class="form-label fw-semibold">Status</label>
                     <select class="form-select" id="ativo" name="ativo" required>
                         <option value="1" <?= $ativo == 1 ? 'selected' : '' ?>>Ativo</option>
@@ -69,14 +69,14 @@ $btnId = $modoEdicao ? 'btnEditarProduto' : 'btnSalvarProduto';
                         placeholder="Descreva o produto"><?= htmlspecialchars($descricao) ?></textarea>
                 </div>
 
-                <div class="col-md-4">
-                    <label for="preco" class="form-label fw-semibold">Preço (Pessoa Física)</label>
+                <div class="col-6 col-md-4 col-lg-3">
+                    <label for="preco" class="form-label fw-semibold">Preço</label>
                     <input type="number" class="form-control" id="preco" name="preco" step="0.01" min="0"
                         placeholder="0,00" value="<?= htmlspecialchars((string) $preco) ?>" required>
                 </div>
 
-                <div class="col-md-4">
-                    <label for="preco_pj" class="form-label fw-semibold">Preço (Pessoa Jurídica)</label>
+                <div class="col-6 col-md-4 col-lg-3">
+                    <label for="preco_pj" class="form-label fw-semibold">Preço PJ</label>
                     <input type="number" class="form-control" id="preco_pj" name="preco_pj" step="0.01" min="0"
                         placeholder="0,00" value="<?= htmlspecialchars((string) $preco_pj) ?>">
                 </div>
@@ -106,7 +106,7 @@ $btnId = $modoEdicao ? 'btnEditarProduto' : 'btnSalvarProduto';
                 <?php endif; ?>
 
                 <div class="col-12">
-                    <div class="border rounded p-3 bg-light text-center" id="previewContainer" style="display:none;">
+                    <div class="border rounded p-3 bg-light text-center pe-none" id="previewContainer" style="display:none;">
                         <img id="previewImagem" src="" alt="Preview" class="img-fluid rounded"
                             style="max-height: 240px; object-fit: contain;">
                     </div>
@@ -122,7 +122,7 @@ $btnId = $modoEdicao ? 'btnEditarProduto' : 'btnSalvarProduto';
 
                         <?php if ($modoEdicao): ?>
                             <a href="admin.php?page=produtos&acao=todos" class="btn btn-secondary">
-                                <i class="fa fa-arrow-left me-2"></i>
+                                <i class="fa fa-times me-2"></i>
                                 Cancelar
                             </a>
                         <?php endif; ?>

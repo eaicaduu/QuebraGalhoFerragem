@@ -2,7 +2,7 @@
 require_once __DIR__ . '/../../app/models/geral/produto_listar.php';
 
 $pesquisa = $pesquisa ?? ($_GET['pesquisa'] ?? null);
-$produtos = listarProdutos($pesquisa);
+$produtos = listarProdutos($pesquisa ?? '', 'usuario');
 ?>
 <div class="row g-3">
 

@@ -32,7 +32,7 @@
                      style="top: 50%; right: 12px; transform: translateY(50%); cursor:pointer;" onclick="salvarCampo('telefone')"></i>
             </div>
 
-            <div id="statusUpdate" class="mt-2"></div>
+            <div id="statusUpdate" class="mt-2 small"></div>
         </form>
 
     </div>

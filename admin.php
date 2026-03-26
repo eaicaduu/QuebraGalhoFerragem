@@ -8,6 +8,9 @@ require_once __DIR__ . '/app/config/database.php';
 require_once __DIR__ . '/app/config/migrations.php';
 require_once __DIR__ . '/app/config/auth.php';
 
+$db = new Database();
+$pdo = $db->getConnection();
+
 if (!$user || !$isAdmin) {
     header('Location: index.php');
     exit;
@@ -26,6 +29,7 @@ if (!$user || !$isAdmin) {
     <!-- JS -->
     <script src="js/perfil/logout.js"></script>
     <script src="js/geral/sidebar.js"></script>
+    <script src="js/geral/pesquisar.js"></script>
     <script src="js/admin/carousel/carousel_salvar.js"></script>
     <script src="js/admin/carousel/carousel_deleta.js"></script>
     <script src="js/admin/carousel/carousel_select.js"></script>

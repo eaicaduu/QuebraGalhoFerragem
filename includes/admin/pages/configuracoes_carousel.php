@@ -47,6 +47,7 @@ if ($modoEdicao) {
                     </label>
                     <input type="file" name="imagens[]" id="imagens" class="form-control" accept="image/*"
                         <?= $modoEdicao ? '' : 'multiple' ?>>
+                    <p class="text-muted mt-1">Tamanho recomendado 1462 x 731</p>
                 </div>
 
                 <div class="row">
