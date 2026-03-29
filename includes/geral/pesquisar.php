@@ -7,7 +7,7 @@
         <div class="position-relative">
             <i class="fa fa-search position-absolute top-50 translate-middle-y text-muted" style="left: 14px;"></i>
 
-            <input type="text" id="inputPesquisarProduto" class="form-control ps-5"
+            <input type="text" id="inputPesquisarProduto" class="form-control ps-5" data-contexto="usuario"
                 placeholder="Digite para pesquisar os produtos.">
         </div>
     </div>

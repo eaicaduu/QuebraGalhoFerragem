@@ -30,15 +30,34 @@ if (!$user || !$isAdmin) {
     <script src="js/perfil/logout.js"></script>
     <script src="js/geral/sidebar.js"></script>
     <script src="js/geral/pesquisar.js"></script>
-    <script src="js/admin/carousel/carousel_salvar.js"></script>
-    <script src="js/admin/carousel/carousel_deleta.js"></script>
-    <script src="js/admin/carousel/carousel_select.js"></script>
-    <script src="js/admin/importar/importar_upload.js"></script>
-    <script src="js/admin/importar/importar_salvar.js"></script>
-    <script src="js/admin/importar/importar_cancel.js"></script>
-    <script src="js/admin/produto/produto_novo.js"></script>
-    <script src="js/admin/produto/produto_editar.js"></script>
-    <script src="js/admin/produto/produto_deleta.js"></script>
+
+        <!-- USUARIO -->
+        <script src="js/admin/usuario/usuario_radio.js"></script>
+        <script src="js/admin/usuario/usuario_editar.js"></script>
+
+        <!-- CAROUSEL -->
+        <script src="js/admin/carousel/carousel_salvar.js"></script>
+        <script src="js/admin/carousel/carousel_deleta.js"></script>
+        <script src="js/admin/carousel/carousel_select.js"></script>
+
+        <!-- IMPORTAR -->
+        <script src="js/admin/importar/importar_upload.js"></script>
+        <script src="js/admin/importar/importar_salvar.js"></script>
+        <script src="js/admin/importar/importar_cancel.js"></script>
+
+        <!-- PRODUTO -->
+        <script src="js/admin/produto/produto_novo.js"></script>
+        <script src="js/admin/produto/produto_radio.js"></script>
+        <script src="js/admin/produto/produto_editar.js"></script>
+        <script src="js/admin/produto/produto_deleta.js"></script>
+        <script src="js/admin/produto/produto_imagem.js"></script>
+
+        <!-- CATEGORIA -->
+        <script src="js/admin/categoria/categoria_nova.js"></script>
+        <script src="js/admin/categoria/categoria_radio.js"></script>
+        <script src="js/admin/categoria/categoria_editar.js"></script>
+        <script src="js/admin/categoria/categoria_deleta.js"></script>
+        <script src="js/admin/categoria/categoria_pesquisar.js"></script>
 </head>
 
 <body class="d-flex flex-column min-vh-100 user-select-none">

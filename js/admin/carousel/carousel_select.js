@@ -72,7 +72,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (!id) return;
 
             if (modoSelecao === 'editar') {
-                window.location.href = `admin.php?page=configuracoes&acao=editar&id=${id}`;
+                window.location.href = `admin.php?page=configuracao&acao=editar&id=${id}`;
                 return;
             }
 

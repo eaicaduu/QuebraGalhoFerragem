@@ -32,7 +32,7 @@
 
     <div class="d-flex flex-column flex-lg-row justify-content-between align-items-center">
       <small class="text-secondary text-center text-lg-start">
-        &copy; 2025 Ferragem Quebra Galho. Todos os direitos reservados.
+        &copy; <?= date('Y') ?> Ferragem Quebra Galho. Todos os direitos reservados.
       </small>
 
       <!-- Redes sociais -->

@@ -50,10 +50,10 @@
                     </a>
                 </li>
 
-                <?php if (isset($user['tipo_usuario']) && in_array($user['tipo_usuario'], [2, 3])): ?>
+                <?php if (isset($user['tipo_usuario']) && $user['tipo_usuario'] >= 2): ?>
                     <li class="nav-item fw-bold">
                         <a href="admin.php" draggable="false"
-                        class="nav-link d-flex align-items-center <?= $isAdminPage ? 'active' : '' ?>">
+                        class="nav-link d-flex align-items-center <?= ($pagina === 'admin.php') ? 'active' : '' ?>">
                             <i class="fa-solid fa-tools me-1"></i> Painel
                         </a>
                     </li>

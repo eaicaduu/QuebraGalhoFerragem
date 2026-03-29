@@ -1,3 +1,10 @@
+#carouselCards,
+#carouselCards .carousel-inner,
+#carouselCards .carousel-item,
+#carouselCards .banner-wrapper {
+    background: transparent;
+}
+
 .banner-wrapper {
     width: 100%;
     aspect-ratio: 21 / 8;

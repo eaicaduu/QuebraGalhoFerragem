@@ -16,38 +16,63 @@ $menuItems = [
     ],
 
     [
-        'page' => 'produtos',
+        'page' => 'produto',
         'icon' => 'fa-tag',
         'label' => 'Produtos',
         'children' => [
             [
-                'page' => 'produtos',
-                'acao' => 'todos',
-                'label' => 'Todos produtos',
+                'page' => 'produto',
+                'acao' => 'todos produtos',
+                'label' => 'Produtos',
                 'file' => 'includes/admin/pages/produto_todos.php',
             ],
             [
-                'page' => 'produtos',
-                'acao' => 'novo',
-                'label' => 'Novo produto',
+                'page' => 'produto',
+                'acao' => 'novo produto',
+                'label' => 'Novo Produto',
                 'file' => 'includes/admin/pages/produto_form.php',
+                'visible' => function () {
+                    return isset($_GET['acao']) &&
+                        $_GET['acao'] === 'novo produto';
+                }
             ],
             [
-                'page' => 'produtos',
-                'acao' => 'editar',
-                'label' => 'Editar produto',
+                'page' => 'produto',
+                'acao' => 'editar produto',
+                'label' => 'Editar Produto',
                 'file' => 'includes/admin/pages/produto_form.php',
                 'visible' => function () {
                     return isset($_GET['acao'], $_GET['id']) &&
-                        $_GET['acao'] === 'editar' &&
+                        $_GET['acao'] === 'editar produto' &&
                         (int) $_GET['id'] > 0;
                 }
             ],
             [
-                'page' => 'categorias',
-                'acao' => 'categoria',
+                'page' => 'categoria',
+                'acao' => 'todas categorias',
                 'label' => 'Categorias',
-                'file' => 'includes/admin/pages/categorias.php',
+                'file' => 'includes/admin/pages/categoria_todas.php',
+            ],
+            [
+                'page' => 'categoria',
+                'acao' => 'nova categoria',
+                'label' => 'Nova Categoria',
+                'file' => 'includes/admin/pages/categoria_form.php',
+                'visible' => function () {
+                    return isset($_GET['acao']) &&
+                        $_GET['acao'] === 'nova categoria';
+                }
+            ],
+            [
+                'page' => 'categoria',
+                'acao' => 'editar categoria',
+                'label' => 'Editar Categoria',
+                'file' => 'includes/admin/pages/categoria_form.php',
+                'visible' => function () {
+                    return isset($_GET['acao'], $_GET['id']) &&
+                        $_GET['acao'] === 'editar categoria' &&
+                        (int) $_GET['id'] > 0;
+                }
             ],
             [
                 'page' => 'importar',
@@ -68,13 +93,13 @@ $menuItems = [
     ],
 
     [
-        'page' => 'pedidos',
+        'page' => 'pedido',
         'icon' => 'fa-box',
         'label' => 'Pedidos',
         'children' => [
             [
-                'page' => 'pedidos',
-                'acao' => 'Todos pedidos',
+                'page' => 'pedido',
+                'acao' => 'todos pedidos',
                 'label' => 'Todos Pedidos',
                 'file' => 'includes/admin/pages/pedidos_todos.php',
             ],
@@ -82,35 +107,35 @@ $menuItems = [
     ],
 
     [
-        'page' => 'usuarios',
+        'page' => 'usuario',
         'icon' => 'fa-users',
         'label' => 'Usuários',
         'children' => [
             [
-                'page' => 'usuarios',
-                'acao' => 'Todos usuarios',
+                'page' => 'usuario',
+                'acao' => 'todos usuarios',
                 'label' => 'Todos usuários',
-                'file' => 'includes/admin/pages/usuarios_todos.php',
+                'file' => 'includes/admin/pages/usuario_todos.php',
             ],
         ],
     ],
 
     [
-        'page' => 'configuracoes',
+        'page' => 'configuracao',
         'icon' => 'fa-gear',
         'label' => 'Configurações',
         'children' => [
             [
-                'page' => 'configuracoes',
-                'acao' => 'carousel',
+                'page' => 'configuracao',
+                'acao' => 'imagens carousel',
                 'label' => 'Imagens Carousel',
-                'file' => 'includes/admin/pages/configuracoes_carousel.php',
+                'file' => 'includes/admin/pages/configuracao_carousel.php',
             ],
             [
-                'page' => 'configuracoes',
+                'page' => 'configuracao',
                 'acao' => 'editar',
                 'label' => 'Editar Imagem',
-                'file' => 'includes/admin/pages/configuracoes_carousel.php',
+                'file' => 'includes/admin/pages/configuracao_carousel.php',
                 'visible' => function () {
                     return isset($_GET['acao'], $_GET['id']) &&
                         $_GET['acao'] === 'editar' &&

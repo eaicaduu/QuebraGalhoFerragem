@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
-    const form = document.getElementById('formNovoProduto');
+    const form = document.getElementById('formNovaCategoria');
     const btnSubmit = form ? form.querySelector('button[type="submit"]') : null;
 
     if (!form || !btnSubmit) return;
@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', function () {
             btnSubmit.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Salvando...';
         } else {
             btnSubmit.disabled = false;
-            btnSubmit.innerHTML = btnSubmit.dataset.textoOriginal || 'Salvar Produto';
+            btnSubmit.innerHTML = btnSubmit.dataset.textoOriginal || 'Salvar Categoria';
         }
     }
 
@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', function () {
         setLoading(true);
 
         try {
-            const response = await fetch('./app/models/produto/produto_novo.php', {
+            const response = await fetch('./app/models/categoria/categoria_nova.php', {
                 method: 'POST',
                 body: formData
             });
@@ -49,28 +49,20 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             if (!response.ok || !data || data.status !== true) {
-                throw new Error(data?.mensagem || 'Erro ao salvar produto.');
+                throw new Error(data?.mensagem || 'Erro ao salvar categoria.');
             }
 
             if (typeof Swal !== 'undefined') {
                 await Swal.fire({
                     icon: 'success',
-                    title: 'Produto salvo',
+                    title: 'Categoria salva',
                     text: data.mensagem || 'Salvo com sucesso'
                 });
             }
 
             form.reset();
 
-            const preview = document.getElementById('previewImagem');
-            const container = document.getElementById('previewContainer');
-
-            if (preview && container) {
-                preview.src = '';
-                container.style.display = 'none';
-            }
-
-            window.location.href = 'admin.php?page=produto&acao=todos produtos';
+            window.location.href = 'admin.php?page=categoria&acao=todas categorias';
 
         } catch (error) {
             mostrarMensagem(error.message || 'Erro inesperado.');

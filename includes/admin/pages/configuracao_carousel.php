@@ -1,7 +1,7 @@
 <?php
-require_once __DIR__ . '/../../../app/models/geral/carousel_listar.php';
+require_once __DIR__ . '/../../../app/models/geral/listar.php';
 
-$carousels = listarCarousel(false);
+$carousels = listar('carousel', null, false, 'id DESC', ['nome']);
 
 $acao = $_GET['acao'] ?? 'carousel';
 $id = isset($_GET['id']) ? (int) $_GET['id'] : 0;

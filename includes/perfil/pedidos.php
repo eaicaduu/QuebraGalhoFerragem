@@ -1,30 +1,10 @@
 <?php
+require_once __DIR__ . '/../../app/models/geral/listar.php';
 
 $pedidos = [];
 
 if (!empty($_SESSION['user_id'])) {
-
-    $db = new Database();
-    $conn = $db->getConnection();
-
-    if (!$conn) {
-        echo json_encode(['success' => false, 'error' => 'erro_conexao']);
-        exit;
-    }
-
-    runMigrations($conn);
-
-    $stmt = $conn->prepare("
-        SELECT id, total, status, criado_em
-        FROM pedidos
-        WHERE usuario_id = :user
-        ORDER BY criado_em DESC
-    ");
-
-    $stmt->bindParam(':user', $_SESSION['user_id']);
-    $stmt->execute();
-
-    $pedidos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $pedidos = listar('pedidos', null, false, 'id DESC', ['nome']);
 }
 ?>
 
@@ -43,7 +23,8 @@ if (!empty($_SESSION['user_id'])) {
                 <p class="mb-0">Você ainda não fez nenhum pedido.</p>
             </div>
 
-        <?php } else { ?>
+        <?php } 
+            else { ?>
 
             <div class="table-responsive">
 

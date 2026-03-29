@@ -3,13 +3,13 @@ header('Content-Type: application/json; charset=utf-8');
 
 require_once __DIR__ . '/../../config/database.php';
 require_once __DIR__ . '/../../config/migrations.php';
-require_once __DIR__ . '/../geral/produto_listar.php';
+require_once __DIR__ . '/../geral/listar.php';
 
 try {
     $pesquisa = $_GET['pesquisa'] ?? '';
     $contexto = $_GET['contexto'] ?? 'usuario';
 
-    $produtos = listarProdutos($pesquisa, $contexto);
+    $produtos = listar('produtos', $pesquisa, false, 'id DESC', ['nome', 'descricao']);
 
     ob_start();
 

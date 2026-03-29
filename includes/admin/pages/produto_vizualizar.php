@@ -31,11 +31,16 @@ $codigosExistentes = array_map('strval', $codigosExistentes);
             <?= count($rows) ?> linha(s)
         </small>
     </div>
+    <div class="text-end">
+        <button id="btnCancelarImportacao" class="btn btn-secondary">
+            <i class="fa fa-times me-1"></i>Cancelar
+        </button>
+    </div>
 </div>
 
 <div class="d-flex flex-column gap-3">
 
-    <div class="border rounded p-3" style="max-height: 40vh; overflow-y: auto;">
+    <div class="shadow-sm rounded p-3" style="max-height: 50vh; overflow-y: auto;">
         <?php foreach ($rows as $index => $row): ?>
 
             <?php
@@ -108,12 +113,6 @@ $codigosExistentes = array_map('strval', $codigosExistentes);
             </div>
 
         <?php endforeach; ?>
-    </div>
-
-    <div class="mt-3 text-end">
-        <button id="btnCancelarImportacao" class="btn btn-secondary">
-            <i class="fa fa-times me-1"></i>Cancelar
-        </button>
     </div>
 
 </div>

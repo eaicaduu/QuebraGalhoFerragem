@@ -9,7 +9,7 @@ $arquivoImportado = $_SESSION['import_arquivo_nome'] ?? '';
 </div>
 
 <div class="card shadow-sm border-0 mb-4">
-    <div class="card-body p-4">
+    <div class="card-body p-3">
         <form id="formImportacao" method="POST" enctype="multipart/form-data">
             <div class="row g-3">
 

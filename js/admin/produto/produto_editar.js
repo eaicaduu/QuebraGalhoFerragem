@@ -58,9 +58,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 text: data.mensagem || 'Produto atualizado com sucesso.'
             });
 
-            if (data.redirect) {
-                window.location.href = data.redirect;
-            }
+            window.location.href = 'admin.php?page=produto&acao=' + encodeURIComponent('todos produtos');
 
         } catch (error) {
             mostrarMensagem(error.message || 'Erro inesperado.');

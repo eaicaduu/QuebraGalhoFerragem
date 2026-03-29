@@ -10,13 +10,16 @@
 
     <?php foreach ($produtos as $produto): ?>
 
-        <div class="card border-0 bg-body-secondary mb-2">
+        <div class="card border-0 bg-body-secondary mb-2 item-produto-selecao" style="cursor: pointer">
             <div class="card-body py-2 px-3">
 
                 <div class="d-flex align-items-center justify-content-between gap-2 overflow-hidden"
                     title="<?= htmlspecialchars($produto['nome']) ?>">
 
                     <div class="d-flex align-items-center gap-3 flex-grow-1 overflow-hidden" style="min-width: 0;">
+
+                        <input type="radio" name="produtoSelecionado" class="form-check-input ms-2 radio-produto"
+                               value="<?= (int) $produto['id'] ?>" data-id="<?= (int) $produto['id'] ?>">
 
                         <div style="width:50px; height:50px; flex: 0 0 50px;">
                             <?php if (!empty($produto['imagem'])): ?>
@@ -55,16 +58,6 @@
 
                         </div>
 
-                    </div>
-
-                    <div class="d-flex gap-2 flex-shrink-0">
-                        <a href="admin.php?page=produtos&acao=editar&id=<?= $produto['id'] ?>" class="btn btn-dark btn-sm">
-                            <i class="fa fa-edit"></i>
-                        </a>
-
-                        <button type="button" class="btn btn-danger btn-sm btn-excluir-produto" data-id="<?= $produto['id'] ?>">
-                            <i class="fa fa-trash"></i>
-                        </button>
                     </div>
 
                 </div>

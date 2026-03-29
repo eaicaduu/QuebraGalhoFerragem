@@ -1,8 +1,9 @@
 <?php
-require_once __DIR__ . '/../../app/models/geral/produto_listar.php';
+require_once __DIR__ . '/../../app/models/geral/listar.php';
+require_once __DIR__ . '/../../app/models/geral/imagem.php';
 
 $pesquisa = $pesquisa ?? ($_GET['pesquisa'] ?? null);
-$produtos = listarProdutos($pesquisa ?? '', 'usuario');
+$produtos = listar('produtos', $pesquisa, true, 'id DESC', ['nome']);
 ?>
 <div class="row g-3">
 
@@ -16,17 +17,16 @@ $produtos = listarProdutos($pesquisa ?? '', 'usuario');
 
     <?php foreach ($produtos as $produto): ?>
 
+        <?php $imagemProduto = obterImagem($produto['imagem'] ?? null, 'images/produto.png', 'app/'); ?>
+
         <div class="col-6 col-md-4 col-lg-3">
             <div class="card border-0 shadow-sm h-100">
 
-                <div class="bg-light d-flex align-items-center justify-content-center" style="height:180px;">
+                <div class="d-flex align-items-center justify-content-center" style="height:180px;">
 
-                    <?php if (!empty($produto['imagem'])): ?>
-                        <img src="app/<?= htmlspecialchars($produto['imagem']) ?>" class="img-fluid"
-                            style="max-height:160px; object-fit:contain;">
-                    <?php else: ?>
-                        <i class="fa fa-image fa-2x text-muted"></i>
-                    <?php endif; ?>
+                    <img src="<?= htmlspecialchars($imagemProduto, ENT_QUOTES, 'UTF-8') ?>" class="w-100 h-100 pe-none"
+                        style="object-fit:contain;" alt="<?= htmlspecialchars($produto['nome']) ?>"
+                        onerror="this.onerror=null;this.src='images/produto.png';">
 
                 </div>
 

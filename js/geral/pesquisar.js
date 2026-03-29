@@ -17,15 +17,29 @@ document.addEventListener('DOMContentLoaded', function () {
         `;
     }
 
+    function tratarTermo(valor) {
+        return valor
+            .replace(/[\x00-\x1F\x7F]/g, '')
+            .trim()
+            .slice(0, 100);
+    }
+
     async function buscarProdutos(termo) {
         mostrarLoading();
 
         try {
             const response = await fetch(
-                './app/models/geral/produto_pesquisar.php?pesquisa='
+                './app/models/geral/pesquisar.php?pesquisa='
                 + encodeURIComponent(termo)
                 + '&contexto='
-                + encodeURIComponent(contexto)
+                + encodeURIComponent(contexto),
+                {
+                    method: 'GET',
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Accept': 'application/json'
+                    }
+                }
             );
 
             const data = await response.json();
@@ -48,7 +62,8 @@ document.addEventListener('DOMContentLoaded', function () {
         clearTimeout(timeout);
 
         timeout = setTimeout(function () {
-            buscarProdutos(input.value.trim());
+            const termo = tratarTermo(input.value);
+            buscarProdutos(termo);
         }, 300);
     });
 });

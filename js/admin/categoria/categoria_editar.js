@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
-    const form = document.getElementById('formNovoProduto');
-    const btnSubmit = form ? form.querySelector('button[type="submit"]') : null;
+    const form = document.getElementById('formEditarCategoria');
+    const btnSubmit = document.getElementById('btnEditarCategoria');
 
     if (!form || !btnSubmit) return;
 
@@ -20,10 +20,10 @@ document.addEventListener('DOMContentLoaded', function () {
         if (ativo) {
             btnSubmit.disabled = true;
             btnSubmit.dataset.textoOriginal = btnSubmit.innerHTML;
-            btnSubmit.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Salvando...';
+            btnSubmit.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Atualizando...';
         } else {
             btnSubmit.disabled = false;
-            btnSubmit.innerHTML = btnSubmit.dataset.textoOriginal || 'Salvar Produto';
+            btnSubmit.innerHTML = btnSubmit.dataset.textoOriginal || 'Atualizar categoria';
         }
     }
 
@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', function () {
         setLoading(true);
 
         try {
-            const response = await fetch('./app/models/produto/produto_novo.php', {
+            const response = await fetch('./app/models/categoria/categoria_editar.php', {
                 method: 'POST',
                 body: formData
             });
@@ -49,28 +49,16 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             if (!response.ok || !data || data.status !== true) {
-                throw new Error(data?.mensagem || 'Erro ao salvar produto.');
+                throw new Error(data?.mensagem || 'Erro ao atualizar categoria.');
             }
 
-            if (typeof Swal !== 'undefined') {
-                await Swal.fire({
-                    icon: 'success',
-                    title: 'Produto salvo',
-                    text: data.mensagem || 'Salvo com sucesso'
-                });
-            }
+            await Swal.fire({
+                icon: 'success',
+                title: 'Categoria atualizada',
+                text: data.mensagem || 'Categoria atualizada com sucesso.'
+            });
 
-            form.reset();
-
-            const preview = document.getElementById('previewImagem');
-            const container = document.getElementById('previewContainer');
-
-            if (preview && container) {
-                preview.src = '';
-                container.style.display = 'none';
-            }
-
-            window.location.href = 'admin.php?page=produto&acao=todos produtos';
+            window.location.href = 'admin.php?page=categoria&acao=todas categorias';
 
         } catch (error) {
             mostrarMensagem(error.message || 'Erro inesperado.');
