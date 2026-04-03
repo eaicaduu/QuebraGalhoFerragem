@@ -1,3 +1,17 @@
+html,
+body {
+    margin: 0;
+    padding: 0;
+}
+
+main,
+section,
+header,
+footer,
+div {
+    box-sizing: border-box;
+}
+
 .swal2-popup .swal2-confirm {
     background-color: #28a745 !important;
     color: #fff !important;
@@ -67,4 +81,15 @@ button:focus {
 
 .nav-link.small.menu-link:hover {
     opacity: 1;
+}
+
+.navbar-brand,
+.navbar-brand img {
+    -webkit-user-drag: none;
+    -webkit-touch-callout: none;
+    user-select: none;
+}
+
+.navbar-brand img {
+    pointer-events: none;
 }

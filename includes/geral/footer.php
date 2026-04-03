@@ -1,4 +1,4 @@
-<footer id="footer" class="bg-dark mt-auto text-light pt-5">
+<footer id="footer" class="mt-auto text-light pt-5">
   <div class="container">
     <div class="row gy-4">
 
@@ -31,7 +31,7 @@
     <hr class="border-secondary my-4" />
 
     <div class="d-flex flex-column flex-lg-row justify-content-between align-items-center">
-      <small class="text-secondary text-center text-lg-start">
+      <small class="text-secondary text-center text-lg-start" style="font-size: 11px;">
         &copy; <?= date('Y') ?> Ferragem Quebra Galho. Todos os direitos reservados.
       </small>
 

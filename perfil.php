@@ -21,25 +21,25 @@ require_once __DIR__ . '/app/config/auth.php';
     <script src="js/utils/maiuscula.js"></script>
 </head>
 
-<body class="d-flex flex-column min-vh-100 user-select-none">
+<body class="d-flex flex-column min-vh-100 user-select-none bg-dark">
 
     <!-- NavBar -->
     <?php include 'includes/geral/navbar.php'; ?>
 
-    <main class="flex-fill">
+    <main class="flex-fill bg-white">
         <div class="container my-2">
             <div class="row">
 
                 <?php if ($user) { ?>
 
                     <!-- Conta -->
-                    <div class="col-12 col-lg-4 mb-3 mb-lg-0">
+                    <div class="col-12 mb-3 mb-lg-0">
                         <?php include 'includes/perfil/conta.php'; ?>
                     </div>
 
                     <!-- Pedidos -->
                     <div class="col-12 col-lg-8">
-                        <?php include 'includes/perfil/pedidos.php'; ?>
+                        <!-- <?php include 'includes/perfil/pedidos.php'; ?> -->
                     </div>
 
                 <?php } else { ?>

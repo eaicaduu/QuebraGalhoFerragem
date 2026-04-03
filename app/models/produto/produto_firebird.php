@@ -15,21 +15,40 @@ function paraUtf8($valor)
 }
 
 set_time_limit(0);
-ini_set('memory_limit', '2048M');
+ini_set('memory_limit', '512M');
 
 try {
+    $pesquisa = trim($_POST['pesquisa'] ?? '');
     $filtroAtivo = $_POST['filtro_ativo'] ?? 'todos';
     $filtroPercentual = ($_POST['filtro_percentual'] ?? '0') === '1';
     $filtroGtin = $_POST['filtro_gtin'] ?? 'todos';
     $filtroEstoqueMin = $_POST['filtro_estoque_min'] ?? '';
     $filtroEstoqueMax = $_POST['filtro_estoque_max'] ?? '';
 
+    $pagina = max(1, (int) ($_POST['pagina'] ?? 1));
+    $porPagina = max(1, min(200, (int) ($_POST['por_pagina'] ?? 50)));
+    $inicio = (($pagina - 1) * $porPagina) + 1;
+    $fim = $pagina * $porPagina;
+
     $filtros = [];
 
+    if ($pesquisa !== '' && mb_strlen($pesquisa) >= 3) {
+        $pesquisaUpper = strtoupper(str_replace("'", "''", $pesquisa));
+
+        $filtros[] = "(
+            UPPER(CAST(CODIGO AS VARCHAR(50))) LIKE '%{$pesquisaUpper}%'
+            OR UPPER(COALESCE(REFERENCIA, '')) LIKE '%{$pesquisaUpper}%'
+            OR UPPER(COALESCE(DESCRICAO, '')) LIKE '%{$pesquisaUpper}%'
+            OR UPPER(COALESCE(NOME, '')) LIKE '%{$pesquisaUpper}%'
+            OR UPPER(COALESCE(FORNECEDOR, '')) LIKE '%{$pesquisaUpper}%'
+            OR UPPER(COALESCE(MEDIDA, '')) LIKE '%{$pesquisaUpper}%'
+        )";
+    }
+
     if ($filtroAtivo === 'ativos') {
-        $filtros[] = 'ATIVO = 1';
+        $filtros[] = '(ATIVO = 1)';
     } elseif ($filtroAtivo === 'inativos') {
-        $filtros[] = 'ATIVO = 0';
+        $filtros[] = '(ATIVO = 0 OR ATIVO IS NULL)';
     }
 
     if ($filtroPercentual) {
@@ -37,25 +56,25 @@ try {
     }
 
     if ($filtroGtin === 'com_gtin') {
-        $filtros[] = "
+        $filtros[] = "(
             REFERENCIA IS NOT NULL
             AND TRIM(REFERENCIA) <> ''
             AND UPPER(TRIM(REFERENCIA)) NOT LIKE '%SEM%'
-        ";
+        )";
     } elseif ($filtroGtin === 'sem_gtin') {
-        $filtros[] = "
+        $filtros[] = "(
             REFERENCIA IS NULL
             OR TRIM(REFERENCIA) = ''
             OR UPPER(TRIM(REFERENCIA)) LIKE '%SEM%'
-        ";
+        )";
     }
 
     if ($filtroEstoqueMin !== '' && is_numeric($filtroEstoqueMin)) {
-        $filtros[] = "QTD_ATUAL >= " . (float) $filtroEstoqueMin;
+        $filtros[] = '(QTD_ATUAL >= ' . (float) $filtroEstoqueMin . ')';
     }
 
     if ($filtroEstoqueMax !== '' && is_numeric($filtroEstoqueMax)) {
-        $filtros[] = "QTD_ATUAL <= " . (float) $filtroEstoqueMax;
+        $filtros[] = '(QTD_ATUAL <= ' . (float) $filtroEstoqueMax . ')';
     }
 
     $whereSql = '';
@@ -85,6 +104,13 @@ try {
     SET NAMES WIN1252;
     SET HEADING OFF;
     SET LIST OFF;
+    SET PAGESIZE 0;
+    SET LINESIZE 32767;
+    SET TRIMSPOOL ON;
+
+    SELECT 'TOTAL_REGISTROS={$separador}' || CAST(COUNT(*) AS VARCHAR(20))
+    FROM ESTOQUE
+    {$whereSql};
 
     SELECT
         COALESCE(CAST(CODIGO AS VARCHAR(50)), '') || '$separador' ||
@@ -100,7 +126,8 @@ try {
         COALESCE(CAST(ATIVO AS VARCHAR(50)), '')
     FROM ESTOQUE
     {$whereSql}
-    ORDER BY CODIGO;
+    ORDER BY CODIGO DESC
+    ROWS {$inicio} TO {$fim};
     SQL;
 
     file_put_contents($sqlTemp, $sql);
@@ -118,9 +145,23 @@ try {
     $linhas = file($saidaTemp, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
 
     $rows = [];
+    $totalBanco = 0;
 
     foreach ($linhas as $linha) {
-        if (strpos($linha, $separador) === false) continue;
+        $linha = trim($linha);
+
+        if ($linha === '') {
+            continue;
+        }
+
+        if (strpos($linha, 'TOTAL_REGISTROS=' . $separador) === 0) {
+            $totalBanco = (int) str_replace('TOTAL_REGISTROS=' . $separador, '', $linha);
+            continue;
+        }
+
+        if (substr_count($linha, $separador) < 10) {
+            continue;
+        }
 
         $v = explode($separador, $linha);
 
@@ -142,13 +183,16 @@ try {
     @unlink($sqlTemp);
     @unlink($saidaTemp);
 
-    $_SESSION['import_rows'] = $rows;
-    $_SESSION['firebird_filtro_ativo'] = $filtroAtivo;
-    $_SESSION['firebird_filtro_percentual'] = $filtroPercentual;
+    $totalPaginas = max(1, (int) ceil($totalBanco / $porPagina));
 
     echo json_encode([
         'status' => 'success',
-        'total' => count($rows)
+        'pagina' => $pagina,
+        'por_pagina' => $porPagina,
+        'total_banco' => $totalBanco,
+        'total_paginas' => $totalPaginas,
+        'total_lido' => count($rows),
+        'rows' => $rows,
     ]);
 } catch (Exception $e) {
     http_response_code(500);

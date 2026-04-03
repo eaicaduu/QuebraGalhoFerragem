@@ -48,6 +48,7 @@ if (!$user || !$isAdmin) {
         <script src="js/admin/produto/produto_deleta.js"></script>
         <script src="js/admin/produto/produto_imagem.js"></script>
         <script src="js/admin/produto/produto_firebird.js"></script>
+        <script src="js/admin/produto/produto_pagina.js"></script>
 
         <!-- CATEGORIA -->
         <script src="js/admin/categoria/categoria_nova.js"></script>
@@ -57,12 +58,12 @@ if (!$user || !$isAdmin) {
         <script src="js/admin/categoria/categoria_pesquisar.js"></script>
 </head>
 
-<body class="d-flex flex-column min-vh-100 user-select-none">
+<body class="d-flex flex-column min-vh-100 user-select-none bg-dark">
 
     <!-- NavBar -->
     <?php include 'includes/geral/navbar.php'; ?>
 
-    <main class="flex-fill">
+    <main class="flex-fill bg-white">
         <div class="container my-2">
             <!-- SlideBar -->
             <?php include 'includes/admin/layout/sidebar.php'; ?>

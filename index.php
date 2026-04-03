@@ -4,7 +4,7 @@ $paginaAtual = basename($_SERVER['PHP_SELF']);
 
 require_once __DIR__ . '/app/config/database.php';
 require_once __DIR__ . '/app/config/migrations.php';
-require_once __DIR__ . '/app/config/auth.php'; 
+require_once __DIR__ . '/app/config/auth.php';
 
 ?>
 <!DOCTYPE html>
@@ -24,15 +24,16 @@ require_once __DIR__ . '/app/config/auth.php';
     <script src="js/perfil/logout.js"></script>
 </head>
 
-<body class="d-flex flex-column min-vh-100 user-select-none">
+<body class="d-flex flex-column min-vh-100 user-select-none bg-dark ">
 
-    <!-- NavBar -->
-    <?php include 'includes/geral/navbar.php'; ?>
+    <main class="flex-fill bg-white">
 
-    <!-- Cards -->
-    <?php include 'includes/index/carousel.php'; ?>
+        <!-- NavBar -->
+        <?php include 'includes/geral/navbar.php'; ?>
 
-    <main class="flex-fill">
+        <!-- Carousel -->
+        <?php include 'includes/index/carousel.php'; ?>
+        
         <div class="container my-2">
 
             <!-- Produtos -->

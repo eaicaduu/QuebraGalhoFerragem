@@ -5,38 +5,46 @@ document.addEventListener('DOMContentLoaded', function () {
     const mensagem = document.getElementById('mensagemCarousel');
     const previewContainer = document.getElementById('previewContainer');
     const previewGrid = document.getElementById('previewGrid');
+    const btnCancelar = document.getElementById('btnEditarCancelar');
 
     if (!form || !inputImagens || !btnSalvar || !mensagem || !previewContainer || !previewGrid) {
         return;
     }
 
-    const btnCancelar = document.getElementById('btnEditarCancelar');
+    const modoEdicao = btnSalvar.id === 'btnEditarCarousel';
+
+    function validarArquivo() {
+        const temArquivo = inputImagens.files && inputImagens.files.length > 0;
+
+        if (modoEdicao) {
+            btnSalvar.disabled = false;
+            return;
+        }
+
+        btnSalvar.disabled = !temArquivo;
+    }
+
+    validarArquivo();
+    inputImagens.addEventListener('change', validarArquivo);
 
     if (btnCancelar) {
         btnCancelar.addEventListener('click', function () {
-            window.location.href = 'admin.php?page=configuracoes&acao=carousel';
+            window.location.href = 'admin.php?page=configuracao&acao=imagens carousel';
         });
     }
 
-    const modoEdicao = btnSalvar.id === 'btnEditarCarousel';
-
-    function mostrarMensagem(texto, tipo = 'success', mostrarReload = false, redirect = null) {
+    function mostrarMensagem(texto, tipo = 'success', mostrarReload = false, redirect = 'admin.php?page=configuracao&acao=imagens carousel') {
         mensagem.innerHTML = `
-        <div class="alert alert-${tipo} fade show mt-3 d-flex justify-content-between align-items-center" role="alert">
-            
-            <div>${texto}</div>
-
-            <div class="d-flex align-items-center gap-2">
-
-                ${mostrarReload ? `
-                    <button type="button" class="btn-close btn-reload" aria-label="Recarregar"></button>
-                ` : ''}
-
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fechar"></button>
-
+            <div class="alert alert-${tipo} fade show mt-3 d-flex justify-content-between align-items-center" role="alert">
+                <div>${texto}</div>
+                <div class="d-flex align-items-center gap-2">
+                    ${mostrarReload ? `
+                        <button type="button" class="btn-close btn-reload" aria-label="Recarregar"></button>
+                    ` : ''}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fechar"></button>
+                </div>
             </div>
-        </div>
-    `;
+        `;
 
         const btnReload = mensagem.querySelector('.btn-reload');
 
@@ -96,6 +104,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     inputImagens.addEventListener('change', function () {
         renderPreview(this.files);
+        validarArquivo();
     });
 
     btnSalvar.addEventListener('click', function () {
@@ -141,7 +150,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 limparMensagem();
 
                 mostrarMensagem(
-                    data.mensagem || (modoEdicao ? 'Imagem atualizada com sucesso!' : 'Imagens salvas com sucesso!'), 'success', true, modoEdicao ? data.redirect : null
+                    data.mensagem || (modoEdicao ? 'Imagem atualizada com sucesso!' : 'Imagens salvas com sucesso!'),
+                    'success',
+                    true,
+                    modoEdicao ? data.redirect : null
                 );
 
                 btnSalvar.innerHTML = modoEdicao
@@ -153,6 +165,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
 
                 form.reset();
+                previewGrid.innerHTML = '';
+                previewContainer.classList.add('d-none');
+                validarArquivo();
             })
             .catch(error => {
                 limparMensagem();
@@ -161,8 +176,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 btnSalvar.disabled = false;
                 btnSalvar.innerHTML = modoEdicao
-                    ? '<i class="fa fa-save me-1"></i><span>Atualizar imagem</span>'
-                    : '<i class="fa fa-save me-1"></i><span>Salvar imagens</span>';
+                    ? '<i class="fa fa-save me-1"></i><span>Atualizar</span>'
+                    : '<i class="fa fa-save me-1"></i><span>Salvar</span>';
+
+                validarArquivo();
             });
     });
 });

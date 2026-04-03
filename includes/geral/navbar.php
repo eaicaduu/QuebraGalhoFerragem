@@ -10,12 +10,12 @@
             </button>
 
             <!-- Logo mobile -->
-            <a class="navbar-brand d-lg-none m-0" href="index.php">
+            <a class="navbar-brand d-lg-none m-0" href="index.php" draggable="false">
                 <img src="images/logo.png" height="50">
             </a>
 
             <!-- Logo desktop -->
-            <a class="navbar-brand d-none d-lg-block" href="index.php">
+            <a class="navbar-brand d-none d-lg-block" href="index.php" draggable="false">
                 <img src="images/logo.png" height="50">
             </a>
 
@@ -23,14 +23,14 @@
 
         <!-- Busca mobile -->
         <?php if ($paginaAtual == 'index.php'): ?>
-        <div class="w-100 d-lg-none mt-2">
-            <div class="position-relative">
-                <i class="fa fa-search position-absolute top-50 translate-middle-y text-muted" style="left: 14px;"></i>
+            <div class="w-100 d-lg-none mt-2">
+                <div class="position-relative">
+                    <i class="fa fa-search position-absolute top-50 translate-middle-y text-muted" style="left: 14px;"></i>
 
-                <input type="text" id="inputPesquisarProdutoMobile" class="form-control ps-5" data-contexto="usuario"
-                    placeholder="Buscar produtos...">
+                    <input type="text" id="inputPesquisarProdutoMobile" class="form-control ps-5" data-contexto="usuario"
+                        placeholder="Buscar produtos...">
+                </div>
             </div>
-        </div>
         <?php endif; ?>
 
         <!-- Menu desktop/mobile -->
@@ -38,17 +38,17 @@
 
             <!-- Busca desktop -->
             <?php if ($paginaAtual == 'index.php'): ?>
-            <div class="flex-grow-1 d-flex justify-content-center px-lg-3 my-2 my-lg-0 d-none d-lg-flex">
-                <div style="width:100%; max-width:500px;">
-                    <div class="position-relative">
-                        <i class="fa fa-search position-absolute top-50 translate-middle-y text-muted"
-                            style="left: 14px;"></i>
+                <div class="flex-grow-1 d-flex justify-content-center px-lg-3 my-2 my-lg-0 d-none d-lg-flex">
+                    <div style="width:100%; max-width:500px;">
+                        <div class="position-relative">
+                            <i class="fa fa-search position-absolute top-50 translate-middle-y text-muted"
+                                style="left: 14px;"></i>
 
-                        <input type="text" id="inputPesquisarProduto" class="form-control ps-5" data-contexto="usuario"
-                            placeholder="Buscar produtos...">
+                            <input type="text" id="inputPesquisarProduto" class="form-control ps-5" data-contexto="usuario"
+                                placeholder="Buscar produtos...">
+                        </div>
                     </div>
                 </div>
-            </div>
             <?php endif; ?>
 
             <ul class="navbar-nav d-flex flex-lg-row align-items-lg-center gap-lg-3">
@@ -67,6 +67,16 @@
                         <?= isset($user['nome']) ? htmlspecialchars(explode(' ', trim($user['nome']))[0]) : 'Minha Conta' ?>
                     </a>
                 </li>
+
+                <?php if ($paginaAtual == 'termos.php'): ?>
+                    <li class="nav-item fw-bold">
+                        <a class="nav-link d-flex align-items-center <?= ($paginaAtual == 'termos.php') ? 'active' : '' ?>"
+                            href="termos.php" draggable="false">
+                            <i class="fa-solid fa-file-lines me-2"></i>
+                            Termos de Uso
+                        </a>
+                    </li>
+                <?php endif; ?>
 
                 <?php if (isset($user['tipo_usuario']) && $user['tipo_usuario'] >= 2): ?>
                     <li class="nav-item fw-bold">

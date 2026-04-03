@@ -1,6 +1,11 @@
 document.addEventListener('DOMContentLoaded', function () {
     const btnAtualizar = document.getElementById('btnImportarFirebird');
     const btnFiltro = document.getElementById('btnFiltroFirebird');
+    const contadorFirebird = document.getElementById('contadorFirebird');
+    const contadorSalvo = sessionStorage.getItem('firebirdContador');
+    if (contadorFirebird && contadorSalvo) {
+        contadorFirebird.textContent = contadorSalvo;
+    }
 
     let filtroAtivo = localStorage.getItem('firebirdFiltroAtivo') || 'todos';
     let filtroPercentual = localStorage.getItem('firebirdFiltroPercentual') === '1';
@@ -30,7 +35,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 throw new Error(data?.erro || 'Erro ao carregar produtos do Firebird.');
             }
 
-            window.location.reload();
+            atualizarContadorFirebird(data);
         } catch (error) {
             console.error('Erro ao carregar Firebird:', error);
 
@@ -42,10 +47,32 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
+    function atualizarContadorFirebird(data) {
+        if (!contadorFirebird || !data) return;
+
+        const totalLido = Number(data.total_lido ?? 0);
+        const totalBanco = Number(data.total_banco ?? 0);
+
+        if (totalLido == totalBanco) {
+            contadorFirebird.textContent = `(${totalLido})`;
+        } else {
+            contadorFirebird.textContent = `(${totalLido} de ${totalBanco})`;
+        }
+
+        sessionStorage.setItem('firebirdContador', contadorFirebird.textContent);
+    }
+
     btnAtualizar?.addEventListener('click', function (e) {
         e.preventDefault();
         carregarBancoFirebird();
     });
+
+    const jaCarregouFirebird = sessionStorage.getItem('firebirdJaCarregou');
+
+    if (!jaCarregouFirebird) {
+        sessionStorage.setItem('firebirdJaCarregou', '1');
+        carregarBancoFirebird();
+    }
 
     btnFiltro?.addEventListener('click', async function (e) {
         e.preventDefault();
@@ -91,7 +118,8 @@ document.addEventListener('DOMContentLoaded', function () {
                             </label>
                         </div>
                         <div class="text-muted mt-1" style="font-size: 13px;">
-                            Mostra somente produtos que tenham % na descrição.
+                            Mostra somente produtos que 
+                            <br> contenham "%" na descrição.
                         </div>
                     </div>
 
@@ -219,7 +247,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     const data = await response.json();
 
                     if (!response.ok) {
-                        throw new Error(data?.erro || 'Erro ao aplicar filtro.');
+                        throw new Error(data?.erro || 'Erro ao carregar produtos do Firebird.');
                     }
 
                     return data;
@@ -234,9 +262,8 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
         if (result.isConfirmed && result.value) {
-            window.location.reload();
-        }
-    });
+            atualizarContadorFirebird(result.value);
+    }     });
 
     const inputPesquisar = document.getElementById('inputPesquisarFirebird');
     const itens = document.querySelectorAll('.item-produto-firebird');

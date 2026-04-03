@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const inputUrl = document.getElementById('imagem_url');
     const preview = document.getElementById('previewImagem');
 
-    const imagemPadrao = 'images/produto.png';
+    const imagemPadrao = 'images/default.png';
 
     if (!preview) return;
 

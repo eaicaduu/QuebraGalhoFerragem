@@ -8,7 +8,7 @@ $caminhoFdb = realpath(__DIR__ . '/../../../app/config/small.fdb');
 $temFirebird = $caminhoFdb && file_exists($caminhoFdb);
 ?>
 
-<div class="d-flex flex-column flex-lg-row justify-content-between align-items-start align-items-lg-center gap-2 mb-4">
+<div class="d-flex flex-column flex-lg-row justify-content-between align-items-start align-items-lg-center gap-2 mb-2">
 
     <div>
         <h3 class="mb-1">Produtos</h3>
@@ -37,10 +37,6 @@ $temFirebird = $caminhoFdb && file_exists($caminhoFdb);
             <i class="fa fa-trash"></i> Excluir
         </button>
 
-        <button id="btnFiltroProduto" class="btn btn-dark btn-sm">
-            <i class="fa fa-filter"></i> Filtro
-        </button>
-
     </div>
 
 </div>
@@ -52,12 +48,23 @@ $temFirebird = $caminhoFdb && file_exists($caminhoFdb);
         <div class="card-body p-3">
 
             <div class="position-sticky top-0 z-3 bg-white pt-2 pb-2">
-                <div class="position-relative">
-                    <i class="fa fa-search position-absolute top-50 translate-middle-y text-muted"
-                        style="left: 14px;"></i>
+                <div class="d-flex align-items-center gap-2">
 
-                    <input type="text" id="inputPesquisarProduto" data-contexto="admin" class="form-control ps-5"
-                        placeholder="Digite para pesquisar os produtos.">
+                    <div class="position-relative flex-grow-1">
+                        <i class="fa fa-search position-absolute top-50 translate-middle-y text-muted"
+                            style="left: 14px;"></i>
+
+                        <input type="text"
+                            id="inputPesquisarProduto"
+                            data-contexto="admin"
+                            class="form-control ps-5 form-control-sm"
+                            placeholder="Pesquisar produtos.">
+                    </div>
+
+                    <button id="btnFiltroProduto" class="btn btn-dark btn-sm">
+                        <i class="fa fa-filter"></i>
+                    </button>
+
                 </div>
             </div>
 

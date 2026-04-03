@@ -13,7 +13,7 @@ if (!is_array($imagens) || empty($imagens)) {
 
 ?>
 
-<section class="carousel-section py-2">
+<section class="carousel-section py-2 bg-white">
     <div class="container">
         <div id="carouselCards" class="carousel slide" data-bs-ride="carousel">
             <div class="carousel-indicators">
@@ -27,7 +27,7 @@ if (!is_array($imagens) || empty($imagens)) {
 
             <div class="carousel-inner rounded-4 overflow-hidden">
                 <?php foreach ($imagens as $index => $banner): ?>
-                    <?php $srcImagem = obterImagem($banner['imagem'] ?? null, 'images/carousel.png', 'app/'); ?>
+                    <?php $srcImagem = obterImagem($banner['imagem'] ?? null, 'images/default.png', 'app/'); ?>
                     <div class="carousel-item <?= $index === 0 ? 'active' : '' ?>">
                         <div class="banner-wrapper">
                             <img src="<?= htmlspecialchars($srcImagem, ENT_QUOTES, 'UTF-8') ?>"

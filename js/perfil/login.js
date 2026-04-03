@@ -29,7 +29,7 @@ window.abrirLoginSwal = function () {
             <button type="button" id="btnAcessar" class="btn btn-warning fw-bold w-100 rounded-4" style="border:none; padding:10px;">Acessar</button>
 
                 <p style="margin-top:10px; font-size:1rem;">Não possui uma conta? <a onclick="semCadastroSwal()" style="cursor:pointer;" class="text-primary">Cadastre-se</a></p>
-                <p style="font-size:0.6rem; color:gray;">Acessando você concorda com o <a style="color:gray;">termo de uso</a></p>
+                <p style="font-size:0.6rem; color:gray;">Acessando você concorda com os <a style="color:gray; text-decoration: underline;" href="termos.php">termos de uso</a></p>
             </form>
         `,
         background: '#ffffff',

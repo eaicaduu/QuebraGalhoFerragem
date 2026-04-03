@@ -16,6 +16,7 @@
   <meta property="og:url" content="https://quebragalhoferragem.com.br/"> 
   <meta property="og:type" content="website">
   <meta property="og:locale" content="pt_BR">
+  <meta name="format-detection" content="telephone=no">
 
   <!-- CSS Geral -->
   <link rel="stylesheet" href="css/geral.css">
@@ -23,14 +24,14 @@
   <!-- Canonical (URL principal da página) -->
   <link rel="canonical" href="https://quebragalhoferragem.com.br/">
 
-  <!-- Bootstrap -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <!-- Css Bootstrap -->
+  <link rel="stylesheet" href="assets/bootstrap-5.3.8-dist/css/bootstrap.min.css">
 
-  <!-- Scripts Bootstrap -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  
+  <!-- Script Bootstrap -->
+  <script src="assets/bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js"></script>
+
   <!-- Fa Fa Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-  <!-- Sweet Alertc -->
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <!-- Sweet Alert -->
+  <script src="assets/sweetalert2-11.26.24/package/dist/sweetalert2.all.min.js"></script>
