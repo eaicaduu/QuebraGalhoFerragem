@@ -1,0 +1,9 @@
+.env
+
+/uploads/
+
+small.fdb
+
+app/config/small.fdb
+
+migrations.php
