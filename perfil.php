@@ -1,6 +1,7 @@
 <?php
 session_start();
 $paginaAtual = basename($_SERVER['PHP_SELF']);
+$arquivoAtual = basename($_SERVER['PHP_SELF']);
 
 require_once __DIR__ . '/app/config/auth.php'; 
 
